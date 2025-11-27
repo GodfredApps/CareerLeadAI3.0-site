@@ -1,0 +1,174 @@
+name: Deploy Marketing Site
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Cancel in-progress runs for the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  # ===========================================
+  # Quality Checks (Lint & Build)
+  # ===========================================
+  quality:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Build and export static site
+        run: npm run export
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: marketing-site-build
+          path: out
+          retention-days: 7
+
+  # ===========================================
+  # Preview Deployment (PR only)
+  # ===========================================
+  deploy-preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    needs: quality
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: marketing-site-build
+          path: out
+
+      - name: Deploy to Firebase Hosting Preview Channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: careercompass-ai-6ci2q
+          channelId: pr-${{ github.event.pull_request.number }}
+          expires: 7d
+          entryPoint: .
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+  # ===========================================
+  # Staging Deployment (develop branch)
+  # ===========================================
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: quality
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: marketing-site-build
+          path: out
+
+      - name: Deploy to Staging Channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: careercompass-ai-6ci2q
+          channelId: staging
+          entryPoint: .
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+      - name: Comment with staging URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: '🚀 Deployed to staging: https://careercompass-ai-6ci2q--staging-nhdrdlca.web.app'
+            })
+
+  # ===========================================
+  # Production Deployment (main branch)
+  # ===========================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: quality
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: marketing-site-build
+          path: out
+
+      - name: Deploy to Production
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: careercompass-ai-6ci2q
+          channelId: live
+          entryPoint: .
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
+
+      - name: Create deployment tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          TAG_NAME="marketing-v$(date +'%Y%m%d-%H%M%S')"
+          git tag -a $TAG_NAME -m "Marketing site deployment: ${{ github.event.head_commit.message }}"
+          git push origin $TAG_NAME
+
+      - name: Comment with production URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: '🎉 Deployed to production: https://careercompass-ai-6ci2q.web.app'
+            })
