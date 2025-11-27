@@ -93,7 +93,7 @@ export default function RootLayout({
                 gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
                   // Cross-domain tracking configuration
                   linker: {
-                    domains: ['careerleadbkndlive--careercompass-ai-6ci2q.europe-west4.hosted.app', 'careerlead.ai']
+                    domains: ['app.careerlead.ai', 'careerlead.ai']
                   },
                   custom_map: {
                     'custom_parameter_1': 'ghana_market',
