@@ -11,7 +11,9 @@ The marketing site uses **static site generation** with Sanity CMS as the conten
 
 ## How to Update Blog Content
 
-### Option 1: Edit in Sanity Studio (Recommended)
+### Option 1: Edit in Sanity Studio (Recommended) ✅
+
+**NEW: Blog posts now use stable document IDs - your edits will persist!**
 
 1. **Access Sanity Studio**
    - URL: https://careerlead-cms.sanity.studio/
@@ -21,6 +23,7 @@ The marketing site uses **static site generation** with Sanity CMS as the conten
    - Click on the blog post you want to edit
    - Make your changes in the rich text editor
    - Click "Publish" when done
+   - **Your edits are now saved permanently!**
 
 3. **Trigger Deployment**
    Since the site is statically generated, you need to rebuild it:
@@ -209,6 +212,37 @@ git push origin main
 
 ---
 
+## Technical Details: Fixed Document IDs
+
+### What Was Fixed (December 5, 2025)
+
+**Problem:**
+- Blog posts were being created with auto-generated random IDs
+- Each import created new documents with different IDs
+- Edits made in Sanity Studio were lost when re-running the import
+- The `deleteExistingPosts()` function had hardcoded IDs that became outdated
+
+**Solution:**
+- Blog posts now use stable, predictable document IDs
+- Changed from `client.create()` to `client.createOrReplace()`
+- Document IDs are based on the post slug (e.g., `post-highest-paying-jobs-ghana-2025`)
+- Re-running the import now **updates** existing posts instead of creating duplicates
+
+**Document IDs:**
+1. `post-highest-paying-jobs-ghana-2025`
+2. `post-cv-writing-guide-ghana-nigeria-2025`
+3. `post-remote-jobs-africa-complete-guide-2025`
+4. `post-software-developer-salaries-africa-2025`
+5. `post-top-skills-demand-africa-2025`
+
+**Benefits:**
+- ✅ Blog posts persist with same ID across imports
+- ✅ Edits in Sanity Studio are preserved
+- ✅ Re-running import updates existing posts
+- ✅ No duplicate posts created
+
+---
+
 ## Contact
 
 For issues or questions:
@@ -216,4 +250,4 @@ For issues or questions:
 - Review Sanity Studio publish history
 - Contact: [Your team contact info]
 
-**Last Updated:** December 5, 2025
+**Last Updated:** December 5, 2025 (Fixed document ID issue)
