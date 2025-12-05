@@ -7,7 +7,8 @@
     "build": "next build",
     "export": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import-blog": "tsx scripts/import-blog-posts.ts"
   },
   "dependencies": {
     "@portabletext/react": "^5.0.0",
@@ -55,6 +56,7 @@
     "eslint-config-next": "14.2.16",
     "puppeteer": "^19.0.0",
     "puppeteer-screen-recorder": "^3.0.6",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
