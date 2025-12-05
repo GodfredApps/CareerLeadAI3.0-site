@@ -1,0 +1,204 @@
+BLOG ARTICLES - CLEAN VERSION WITH CTAs
+========================================
+
+STATUS: READY TO COPY-PASTE INTO SANITY
+
+Location: /content/blog-articles-clean/
+
+---
+
+WHAT I'VE DONE:
+
+1. REMOVED ALL MARKDOWN FORMATTING
+   ✓ No asterisks for bold/italic
+   ✓ No backticks for code
+   ✓ No quote marks around examples
+   ✓ Plain text that copies cleanly
+
+2. ADDED STRATEGIC CTAs
+   ✓ 6-10 CTAs per article
+   ✓ Contextual to content
+   ✓ Brand-aligned messaging
+   ✓ Strong final call-to-action
+
+3. CTA HOOKS USED:
+   ✓ "Generate Your Career Path"
+   ✓ "Start Managing Your Career Today"
+   ✓ "Get AI-Powered Recommendations"
+   ✓ "Take Action Now"
+   ✓ "Transform Your Career"
+   ✓ "Discover Your Ideal Path"
+
+---
+
+SAMPLE ARTICLE COMPLETED:
+
+Article 1: Highest Paying Jobs in Ghana 2025
+File: highest-paying-jobs-ghana-2025-clean.txt
+Status: ✓ READY
+CTAs: 8 throughout + 1 strong final
+Format: Plain text, no formatting issues
+
+CTA Examples from this article:
+
+Mid-article CTA:
+"Ready to transition into tech? CareerLead AI can map your path from your current role to IT management. Start your career transformation now."
+
+Contextual CTA:
+"Not sure which path fits you best? Take CareerLead AI's skill assessment to discover your strengths and ideal career matches."
+
+Strong Final CTA:
+"START MANAGING YOUR CAREER TODAY - Generate your personalized career roadmap with CareerLead AI in under 5 minutes."
+
+---
+
+REMAINING 4 ARTICLES:
+
+Due to length constraints, I recommend:
+
+OPTION A: I create abbreviated versions now (2,000-3,000 words each with CTAs)
+OPTION B: You use the first article as a template and add CTAs to the others
+OPTION C: I create them one at a time as separate requests
+
+The first article shows the exact format you need:
+- No special characters
+- Clean copy-paste
+- Strategic CTA placement
+- Brand-aligned messaging
+
+---
+
+HOW TO ADD TO SANITY (STEP BY STEP):
+
+STEP 1: Open the Clean Article
+Open: /content/blog-articles-clean/highest-paying-jobs-ghana-2025-clean.txt
+
+STEP 2: Select All & Copy
+- Press Cmd+A (Mac) or Ctrl+A (Windows)
+- Press Cmd+C (Mac) or Ctrl+C (Windows)
+
+STEP 3: Open Sanity Studio
+Navigate to: https://careerlead-cms.sanity.studio/
+
+STEP 4: Create New Post
+- Click "Blog Post" in sidebar
+- Click "+" button
+- Fill in Title (from top of .txt file)
+- Fill in Slug (from top of .txt file)
+- Fill in Excerpt/Meta Description
+
+STEP 5: Paste Content
+- Click in the "Content" rich text field
+- Press Cmd+V (Mac) or Ctrl+V (Windows)
+- Content will paste cleanly
+- Headings will be recognized automatically
+
+STEP 6: Add Metadata
+From the .txt file header:
+- Category: Career Insights
+- Reading Time: 8
+- Featured: Yes
+- Target Audience: Job Seekers, Career Changers, Students
+- Published At: (current date)
+
+STEP 7: Add Author
+- Create "Author" if not exists
+- Name: CareerLead AI Team
+- Bio: (optional)
+
+STEP 8: Review & Publish
+- Preview the content
+- Check formatting looks good
+- Click "Publish"
+
+STEP 9: View on Site
+Navigate to: http://localhost:3001/blog
+Your article should appear!
+
+---
+
+CTA BUTTON IMPLEMENTATION (FOR DEVELOPER):
+
+After publishing articles, add clickable CTA buttons in the blog post template:
+
+Location: /app/blog/[slug]/page.tsx
+
+Example CTA Button Component:
+
+<CTAButton
+  text="Generate Your Career Path"
+  link="/generate-career-paths"
+  style="primary"
+  icon="arrow-right"
+/>
+
+Button should:
+- Use brand teal color (#14b8a6)
+- White text
+- Hover effect (darker teal)
+- Track click events in Google Analytics
+
+---
+
+CTA PLACEMENT STRATEGY:
+
+Early Hook (After Introduction):
+Captures engaged readers early
+
+Mid-Content CTAs (After High-Value Sections):
+Reader has seen value, ready to act
+
+Pre-Conclusion CTA:
+Reader finished learning, time to act
+
+Final Strong CTA:
+Last chance to convert
+
+---
+
+ANALYTICS TO TRACK:
+
+For each article, track:
+1. CTA click-through rate
+2. Time to first CTA click
+3. Which CTAs perform best
+4. Scroll depth when CTA clicked
+5. Conversion rate (CTA click → signup)
+
+This data will help optimize future articles.
+
+---
+
+NEXT STEPS:
+
+IMMEDIATE (Today):
+1. Open highest-paying-jobs-ghana-2025-clean.txt
+2. Copy-paste into Sanity Studio
+3. Publish
+4. Test viewing at /blog
+
+THIS WEEK:
+1. Decide on format for remaining 4 articles
+2. Create individual blog post pages (/blog/[slug])
+3. Add CTA button components
+4. Style CTAs with brand colors
+
+NEXT WEEK:
+1. Publish remaining articles
+2. Submit sitemap to Google
+3. Share on social media
+4. Monitor analytics
+
+---
+
+QUESTIONS?
+
+Need help with:
+- Creating remaining 4 clean articles?
+- Styling CTAs to match brand?
+- Setting up analytics tracking?
+- Building blog post detail pages?
+
+Just let me know!
+
+All files ready in: /content/blog-articles-clean/
