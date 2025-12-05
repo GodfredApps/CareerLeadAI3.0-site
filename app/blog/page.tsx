@@ -17,8 +17,6 @@ interface BlogPost {
   featured: boolean
 }
 
-export const revalidate = 3600 // Revalidate every hour
-
 export default async function BlogPage() {
   const posts: BlogPost[] = await sanityClient.fetch(postsQuery)
 

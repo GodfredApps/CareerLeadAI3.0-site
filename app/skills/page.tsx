@@ -9,8 +9,6 @@ interface Skill {
   demandLevel: string
 }
 
-export const revalidate = 3600 // Revalidate every hour
-
 export default async function SkillsPage() {
   const skills: Skill[] = await sanityClient.fetch(skillsQuery)
 

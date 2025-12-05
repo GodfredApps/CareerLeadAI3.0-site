@@ -20,8 +20,6 @@ interface BlogPost {
   updatedAt?: string
 }
 
-export const revalidate = 3600 // Revalidate every hour
-
 // Generate metadata for SEO
 export async function generateMetadata({
   params,

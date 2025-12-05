@@ -1,4 +1,4 @@
-import { createClient } from 'next-sanity'
+import { createClient } from '@sanity/client'
 // import { getImageDimensions } from '@sanity/asset-utils'
 // import type { Image } from 'sanity'
 
@@ -14,19 +14,20 @@ export const config = {
  */
 export const sanityClient = createClient(config)
 
-/**
- * Set up a preview client with authenticated access for drafts
- */
-export const previewClient = createClient({
-  ...config,
-  useCdn: false,
-  token: process.env.SANITY_API_TOKEN,
-})
+// Preview client disabled for static export compatibility
+// /**
+//  * Set up a preview client with authenticated access for drafts
+//  */
+// export const previewClient = createClient({
+//   ...config,
+//   useCdn: false,
+//   token: process.env.SANITY_API_TOKEN,
+// })
 
-/**
- * Helper function to choose the right client
- */
-export const getClient = (preview?: boolean) => (preview ? previewClient : sanityClient)
+// /**
+//  * Helper function to choose the right client
+//  */
+// export const getClient = (preview?: boolean) => (preview ? previewClient : sanityClient)
 
 /**
  * Set up the image URL builder
