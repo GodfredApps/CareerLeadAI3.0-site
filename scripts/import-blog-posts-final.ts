@@ -11,9 +11,10 @@ const client = createClient({
   useCdn: false,
 })
 
-// Blog post metadata
+// Blog post metadata with fixed document IDs
 const blogPosts = [
   {
+    id: 'post-highest-paying-jobs-ghana-2025',
     file: 'highest-paying-jobs-ghana-2025.md',
     title: 'Top 20 Highest Paying Jobs in Ghana 2025 [With Salary Ranges]',
     slug: 'highest-paying-jobs-ghana-2025',
@@ -25,6 +26,7 @@ const blogPosts = [
     excerpt: 'Discover the highest paying jobs in Ghana for 2025. Complete salary guide including doctors, engineers, IT managers, and more. Find your next career opportunity.',
   },
   {
+    id: 'post-cv-writing-guide-ghana-nigeria-2025',
     file: 'cv-writing-guide-ghana-nigeria.md',
     title: 'How to Write a CV That Gets You Hired in Ghana & Nigeria [2025 Guide + Templates]',
     slug: 'cv-writing-guide-ghana-nigeria-2025',
@@ -36,6 +38,7 @@ const blogPosts = [
     excerpt: 'Master CV writing for the Ghanaian and Nigerian job markets. Learn ATS optimization, formatting tips, and get free templates. Land your dream job in 2025.',
   },
   {
+    id: 'post-remote-jobs-africa-complete-guide-2025',
     file: 'remote-jobs-africa-2025-guide.md',
     title: 'The Complete Guide to Landing Remote Jobs in Africa [2025]',
     slug: 'remote-jobs-africa-complete-guide-2025',
@@ -47,6 +50,7 @@ const blogPosts = [
     excerpt: 'Discover 1,000+ remote job opportunities in Africa. Learn where to find them, required skills, salary expectations, and how to land high-paying remote roles from Ghana, Nigeria, Kenya, and beyond.',
   },
   {
+    id: 'post-software-developer-salaries-africa-2025',
     file: 'software-developer-salaries-africa-2025.md',
     title: 'Software Developer Salaries Across Africa: Complete 2025 Salary Guide [Ghana, Nigeria, Kenya, South Africa]',
     slug: 'software-developer-salaries-africa-2025',
@@ -58,6 +62,7 @@ const blogPosts = [
     excerpt: 'Discover software developer salaries across Africa in 2025. Compare earnings in Ghana, Nigeria, Kenya, and South Africa. Includes salary ranges by experience level and specialization.',
   },
   {
+    id: 'post-top-skills-demand-africa-2025',
     file: 'top-skills-demand-africa-2025.md',
     title: 'Top 10 In-Demand Skills in Africa for 2025 [With Free Courses & Certifications]',
     slug: 'top-skills-demand-africa-2025',
@@ -239,39 +244,8 @@ function markdownToPortableText(markdown: string) {
   return blocks
 }
 
-async function deleteExistingPosts() {
-  console.log('🗑️  Deleting existing blog posts from previous import...\n')
-
-  // Delete the posts created by the second (fixed) import
-  const docIds = [
-    'hTPvuZC2KTn8PDpfRaDZu4',
-    '9V0EjzLyCoFrLuM34D1UaY',
-    'hTPvuZC2KTn8PDpfRaDaFf',
-    'XPU1tLSPIevqoKi2rLAXv1',
-    'hTPvuZC2KTn8PDpfRaDaPd',
-  ]
-
-  for (const id of docIds) {
-    try {
-      await client.delete(id)
-      console.log(`✅ Deleted document: ${id}`)
-    } catch (error: any) {
-      if (error.statusCode === 404) {
-        console.log(`ℹ️  Document not found (already deleted): ${id}`)
-      } else {
-        console.error(`❌ Error deleting ${id}:`, error.message)
-      }
-    }
-  }
-
-  console.log('\n')
-}
-
 async function importBlogPosts() {
-  console.log('🚀 Starting blog posts import to Sanity (FINAL VERSION - Clean Text)...\n')
-
-  // First, delete existing posts
-  await deleteExistingPosts()
+  console.log('🚀 Starting blog posts import to Sanity (with fixed document IDs for editability)...\n')
 
   for (const post of blogPosts) {
     try {
@@ -305,8 +279,9 @@ async function importBlogPosts() {
       // Convert markdown to Portable Text blocks with clean text
       const portableTextContent = markdownToPortableText(mainContent)
 
-      // Create blog post document
+      // Create blog post document with fixed ID
       const blogPostDoc = {
+        _id: post.id,  // Use fixed ID so document persists across imports
         _type: 'post',
         title: post.title,
         slug: {
@@ -328,10 +303,10 @@ async function importBlogPosts() {
         },
       }
 
-      // Create document in Sanity
-      const result = await client.create(blogPostDoc)
+      // Create or update document in Sanity (allows editing in Studio)
+      const result = await client.createOrReplace(blogPostDoc)
 
-      console.log(`✅ Created: ${post.title}`)
+      console.log(`✅ Created/Updated: ${post.title}`)
       console.log(`   Document ID: ${result._id}`)
       console.log(`   Slug: ${post.slug}`)
       console.log(`   Content blocks: ${portableTextContent.length}\n`)
@@ -342,7 +317,7 @@ async function importBlogPosts() {
 
   console.log('🎉 Import complete!')
   console.log(
-    '\n📊 Summary: Imported 5 blog posts with clean, properly formatted content'
+    '\n📊 Summary: Created/Updated 5 blog posts with fixed IDs (now editable in Sanity Studio!)'
   )
   console.log(
     '🌐 View in Sanity Studio: https://careerlead-cms.sanity.studio/'
@@ -350,7 +325,8 @@ async function importBlogPosts() {
   console.log(
     '🌐 View on site (after deployment): https://careerlead.ai/blog/'
   )
-  console.log('\n⚠️  Note: Site updates require rebuilding. Push to main branch to trigger deployment.')
+  console.log('\n✅ FIXED: Blog posts now use stable document IDs - edits in Sanity Studio will persist!')
+  console.log('⚠️  Note: Site updates require rebuilding. Push to main branch to trigger deployment.')
 }
 
 // Run the import
