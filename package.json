@@ -8,7 +8,7 @@
     "export": "next build",
     "start": "next start",
     "lint": "next lint",
-    "import-blog": "tsx scripts/import-blog-posts-fixed.ts"
+    "import-blog": "tsx scripts/import-blog-posts-final.ts"
   },
   "dependencies": {
     "@portabletext/react": "^5.0.0",
