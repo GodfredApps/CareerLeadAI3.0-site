@@ -167,8 +167,9 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           TAG_NAME="marketing-v$(date +'%Y%m%d-%H%M%S')"
-          git tag -a $TAG_NAME -m "Marketing site deployment: ${{ github.event.head_commit.message }}"
-          git push origin $TAG_NAME
+          COMMIT_MSG=$(git log -1 --format=%s)
+          git tag -a "$TAG_NAME" -m "Marketing site deployment: $COMMIT_MSG"
+          git push origin "$TAG_NAME"
 
       - name: Comment with production URL
         uses: actions/github-script@v7
