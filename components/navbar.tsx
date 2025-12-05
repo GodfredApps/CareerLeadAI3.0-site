@@ -26,6 +26,7 @@ export function Navbar() {
     return [
       { name: 'Home', href: '/' },
       { name: 'How It Works', href: '/how-it-works' },
+      { name: 'Blog', href: '/blog' },
       { name: "What's New", href: '/whats-new' },
       { name: 'About', href: '/about' },
       { name: 'FAQ', href: '/faq' },
