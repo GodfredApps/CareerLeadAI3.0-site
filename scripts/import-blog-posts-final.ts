@@ -21,7 +21,7 @@ const blogPosts = [
     category: 'career-advice',
     author: { name: 'CareerLead AI Team' },
     readingTime: 8,
-    featured: true,
+    featured: false,  // Not featured - appears in All Posts
     targetAudience: ['students', 'recent-graduates', 'career-changers'],
     excerpt: 'Discover the highest paying jobs in Ghana for 2025. Complete salary guide including doctors, engineers, IT managers, and more. Find your next career opportunity.',
   },
@@ -33,7 +33,7 @@ const blogPosts = [
     category: 'resume-portfolio',
     author: { name: 'CareerLead AI Team' },
     readingTime: 10,
-    featured: true,
+    featured: true,  // Featured post
     targetAudience: ['students', 'recent-graduates', 'career-changers'],
     excerpt: 'Master CV writing for the Ghanaian and Nigerian job markets. Learn ATS optimization, formatting tips, and get free templates. Land your dream job in 2025.',
   },
@@ -45,7 +45,7 @@ const blogPosts = [
     category: 'career-advice',
     author: { name: 'CareerLead AI Team' },
     readingTime: 12,
-    featured: true,
+    featured: true,  // Featured post
     targetAudience: ['students', 'recent-graduates', 'early-career', 'career-changers'],
     excerpt: 'Discover 1,000+ remote job opportunities in Africa. Learn where to find them, required skills, salary expectations, and how to land high-paying remote roles from Ghana, Nigeria, Kenya, and beyond.',
   },
@@ -57,7 +57,7 @@ const blogPosts = [
     category: 'career-advice',
     author: { name: 'CareerLead AI Team' },
     readingTime: 11,
-    featured: true,
+    featured: true,  // Featured post
     targetAudience: ['students', 'recent-graduates', 'early-career', 'career-changers'],
     excerpt: 'Discover software developer salaries across Africa in 2025. Compare earnings in Ghana, Nigeria, Kenya, and South Africa. Includes salary ranges by experience level and specialization.',
   },
@@ -69,7 +69,7 @@ const blogPosts = [
     category: 'skill-development',
     author: { name: 'CareerLead AI Team' },
     readingTime: 13,
-    featured: true,
+    featured: false,  // Not featured - appears in All Posts
     targetAudience: ['students', 'recent-graduates', 'career-changers'],
     excerpt: 'Discover the top 10 most in-demand skills in Africa for 2025. Learn digital literacy, data science, cybersecurity, and more. Includes free courses and career opportunities.',
   },
