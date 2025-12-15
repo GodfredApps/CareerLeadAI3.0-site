@@ -1,10 +1,38 @@
 import React from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, BarChart3, Brain, Compass, MessageCircle, Target, Users } from "lucide-react"
+import { ArrowRight, BarChart3, Brain, Compass, MessageCircle, Target, Users, BookOpen, Clock } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { IMAGES } from "@/lib/supabase-storage"
+import { sanityClient } from "@/lib/sanity"
 
-export default function Home() {
+interface BlogPost {
+  _id: string
+  title: string
+  slug: { current: string }
+  excerpt: string
+  category: string
+  readingTime: number
+  publishedAt: string
+}
+
+async function getFeaturedPosts(): Promise<BlogPost[]> {
+  const posts = await sanityClient.fetch<BlogPost[]>(`
+    *[_type == "post" && featured == true] | order(publishedAt desc) [0...3] {
+      _id,
+      title,
+      slug,
+      excerpt,
+      category,
+      readingTime,
+      publishedAt
+    }
+  `)
+  return posts
+}
+
+export default async function Home() {
+  const featuredPosts = await getFeaturedPosts()
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -133,6 +161,34 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Featured Blog Posts Section */}
+      {featuredPosts.length > 0 && (
+        <section className="py-16 md:py-24 bg-background">
+          <div className="container px-4 md:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Career Insights & Resources</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Expert guides and insights to help you navigate your career journey in Africa
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredPosts.map((post) => (
+                <BlogPostCard key={post._id} post={post} />
+              ))}
+            </div>
+
+            <div className="mt-12 text-center">
+              <Button asChild>
+                <Link href="/blog">
+                  View All Articles <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Testimonials Section */}
       <section className="py-16 md:py-24 bg-secondary/50">
@@ -272,3 +328,38 @@ const TestimonialCard = React.memo(
 )
 
 TestimonialCard.displayName = "TestimonialCard"
+
+const BlogPostCard = React.memo(
+  ({ post }: { post: BlogPost }) => {
+    return (
+      <Link href={`/blog/${post.slug.current}`} className="group">
+        <div className="bg-card p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow h-full flex flex-col">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="inline-block px-2 py-1 bg-teal-100 text-teal-800 text-xs font-medium rounded">
+              {post.category}
+            </span>
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Clock className="h-3 w-3 mr-1" />
+              <span>{post.readingTime} min read</span>
+            </div>
+          </div>
+
+          <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-teal-600 transition-colors line-clamp-2">
+            {post.title}
+          </h3>
+
+          <p className="text-muted-foreground mb-4 line-clamp-3 flex-grow">
+            {post.excerpt}
+          </p>
+
+          <div className="flex items-center text-sm text-teal-600 font-medium mt-auto">
+            <BookOpen className="h-4 w-4 mr-2" />
+            Read Article <ArrowRight className="ml-1 h-3 w-3 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+      </Link>
+    )
+  },
+)
+
+BlogPostCard.displayName = "BlogPostCard"
