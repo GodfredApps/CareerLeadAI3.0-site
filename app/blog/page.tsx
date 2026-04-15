@@ -1,24 +1,10 @@
-import { sanityClient, postsQuery } from '@/lib/sanity'
 import Link from 'next/link'
+import { getPublishedPosts } from '@/lib/supabase-blog'
 
-interface BlogPost {
-  _id: string
-  title: string
-  slug: { current: string }
-  excerpt: string
-  featuredImage?: any
-  category: string
-  author: {
-    name: string
-    role?: string
-  }
-  readingTime: number
-  publishedAt: string
-  featured: boolean
-}
+export const dynamic = 'force-dynamic'
 
 export default async function BlogPage() {
-  const posts: BlogPost[] = await sanityClient.fetch(postsQuery)
+  const posts = await getPublishedPosts()
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -34,20 +20,20 @@ export default async function BlogPage() {
 
         {posts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No blog posts found. Create some in the Studio!</p>
+            <p className="text-gray-500 text-lg">No blog posts published yet.</p>
           </div>
         ) : (
           <>
             {/* Featured Posts */}
-            {posts.some(post => post.featured) && (
+            {posts.some((post) => post.featured) && (
               <div className="mb-16">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Posts</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {posts
-                    .filter(post => post.featured)
+                    .filter((post) => post.featured)
                     .map((post) => (
                       <article
-                        key={post._id}
+                        key={post.id}
                         className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
                       >
                         <div className="p-6">
@@ -56,7 +42,7 @@ export default async function BlogPage() {
                               {post.category}
                             </span>
                             <span className="text-xs text-gray-500">
-                              {post.readingTime} min read
+                              {post.reading_time} min read
                             </span>
                           </div>
 
@@ -73,25 +59,24 @@ export default async function BlogPage() {
                           <div className="flex items-center justify-between">
                             <div>
                               <p className="text-sm font-medium text-gray-900">
-                                {post.author.name}
+                                {post.author_name ?? 'CareerLead AI'}
                               </p>
-                              {post.author.role && (
-                                <p className="text-xs text-gray-500">
-                                  {post.author.role}
+                              {post.author_bio && (
+                                <p className="text-xs text-gray-500 line-clamp-1">
+                                  {post.author_bio}
                                 </p>
                               )}
                             </div>
                             <time className="text-xs text-gray-500">
-                              {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric'
-                              })}
+                              {new Date(post.published_at ?? post.created_at).toLocaleDateString(
+                                'en-US',
+                                { month: 'short', day: 'numeric', year: 'numeric' }
+                              )}
                             </time>
                           </div>
 
                           <Link
-                            href={`/blog/${post.slug.current}`}
+                            href={`/blog/${post.slug}`}
                             className="mt-4 inline-block text-teal-600 hover:text-teal-700 font-medium text-sm"
                           >
                             Read More →
@@ -106,14 +91,14 @@ export default async function BlogPage() {
             {/* All Posts */}
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                {posts.some(post => post.featured) ? 'All Posts' : 'Latest Posts'}
+                {posts.some((post) => post.featured) ? 'All Posts' : 'Latest Posts'}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {posts
-                  .filter(post => !post.featured)
+                  .filter((post) => !post.featured)
                   .map((post) => (
                     <article
-                      key={post._id}
+                      key={post.id}
                       className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
                     >
                       <div className="p-6">
@@ -122,7 +107,7 @@ export default async function BlogPage() {
                             {post.category}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {post.readingTime} min read
+                            {post.reading_time} min read
                           </span>
                         </div>
 
@@ -139,25 +124,24 @@ export default async function BlogPage() {
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="text-sm font-medium text-gray-900">
-                              {post.author.name}
+                              {post.author_name ?? 'CareerLead AI'}
                             </p>
-                            {post.author.role && (
-                              <p className="text-xs text-gray-500">
-                                {post.author.role}
+                            {post.author_bio && (
+                              <p className="text-xs text-gray-500 line-clamp-1">
+                                {post.author_bio}
                               </p>
                             )}
                           </div>
                           <time className="text-xs text-gray-500">
-                            {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric'
-                            })}
+                            {new Date(post.published_at ?? post.created_at).toLocaleDateString(
+                              'en-US',
+                              { month: 'short', day: 'numeric', year: 'numeric' }
+                            )}
                           </time>
                         </div>
 
                         <Link
-                          href={`/blog/${post.slug.current}`}
+                          href={`/blog/${post.slug}`}
                           className="mt-4 inline-block text-teal-600 hover:text-teal-700 font-medium text-sm"
                         >
                           Read More →
