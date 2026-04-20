@@ -9,6 +9,12 @@ on:
     branches:
       - main
       - develop
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for rebuild (e.g. blog post published)'
+        required: false
+        default: 'Manual rebuild'
 
 # Cancel in-progress runs for the same branch
 concurrency:
@@ -50,6 +56,9 @@ jobs:
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
           NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.SANITY_DATASET }}
           SANITY_API_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
