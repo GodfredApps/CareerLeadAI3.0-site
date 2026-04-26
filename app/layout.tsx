@@ -5,6 +5,8 @@ import Script from "next/script"
 import { Navbar } from "@/components/navbar"
 import Footer from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
+import { CookieBanner } from "@/components/ui/cookie-banner"
+import { AnalyticsTracker } from "@/components/analytics-tracker"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -113,7 +115,7 @@ export default function RootLayout({
             </Script>
           </>
         )}
-        
+
         {/* Structured Data for Organization */}
         <Script
           id="structured-data-organization"
@@ -177,7 +179,7 @@ export default function RootLayout({
                 "name": "Ghana"
               },
               {
-                "@type": "Continent", 
+                "@type": "Continent",
                 "name": "Africa"
               }
             ],
@@ -204,6 +206,8 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <CookieBanner />
+            <AnalyticsTracker />
           </div>
         </ThemeProvider>
       </body>
