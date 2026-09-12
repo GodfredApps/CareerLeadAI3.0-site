@@ -35,10 +35,10 @@ You need to add the following secrets to your GitHub repository:
 
 #### 3. SANITY_API_TOKEN
 - **Name**: `SANITY_API_TOKEN`
-- **Value**: `sk8pK6zg1K7Pk0ujBMJbRYNqi43PiH0GEAB0kbXhZcDGL2iJTfeVJxCEUMbFPdKGF6tfDxTB2i9EHju6e66YQg89JnG5dZDV3YgHpy7f4uTOvoA74F11l1sZAfXrkYfUmaKjfTDQiPTYLp5izG5toXK9LkOqjCOYVlUmzn39S6EwVnRP4bW9`
+- **Value**: Use the current Sanity API token from the secure vault.
 - **Description**: Sanity API token for read access
 
-**Note**: The API token above is from your `.env.local` file and has read access to your Sanity project.
+**Note**: Never paste real Sanity API tokens into committed documentation.
 
 ## Step 2: Verify Existing Secrets
 
