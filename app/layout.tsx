@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Plus_Jakarta_Sans, Archivo } from "next/font/google"
 import "./globals.css"
 import Script from "next/script"
 import { Navbar } from "@/components/navbar"
@@ -8,7 +8,19 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { CookieBanner } from "@/components/ui/cookie-banner"
 import { AnalyticsTracker } from "@/components/analytics-tracker"
 
-const inter = Inter({ subsets: ["latin"] })
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
+})
+
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-archivo",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: "CareerLead AI - AI-Powered Career Guidance for Ghana & Africa",
@@ -193,7 +205,7 @@ export default function RootLayout({
           })}
         </Script>
       </head>
-      <body className={inter.className}>
+      <body className={`${plusJakartaSans.variable} ${archivo.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

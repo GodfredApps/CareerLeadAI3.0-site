@@ -156,7 +156,7 @@ Based on keyword research:
 ```bash
 NEXT_PUBLIC_SANITY_PROJECT_ID=7tw53zjn \
 NEXT_PUBLIC_SANITY_DATASET=production \
-SANITY_API_TOKEN=sk8pK6zg1K7Pk0ujBMJbRYNqi43PiH0GEAB0kbXhZcDGL2iJTfeVJxCEUMbFPdKGF6tfDxTB2i9EHju6e66YQg89JnG5dZDV3YgHpy7f4uTOvoA74F11l1sZAfXrkYfUmaKjfTDQiPTYLp5izG5toXK9LkOqjCOYVlUmzn39S6EwVnRP4bW9 \
+SANITY_API_TOKEN=your-sanity-api-token \
 npm run import-blog
 ```
 

@@ -18,6 +18,12 @@ const config: Config = {
   	},
   	extend: {
   		colors: {
+			ink: {
+				DEFAULT: 'hsl(var(--brand-ink))',
+				900: 'hsl(var(--brand-ink-900))',
+				700: 'hsl(var(--brand-ink-700))',
+				foreground: 'hsl(var(--brand-ink-foreground))'
+			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -69,10 +75,22 @@ const config: Config = {
   				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
+		fontFamily: {
+			sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+			display: ['Archivo', 'Plus Jakarta Sans', 'system-ui', 'sans-serif']
+		},
+		boxShadow: {
+			'elevation-xs': '0 1px 2px 0 rgba(11,36,54,0.06)',
+			'elevation-sm': '0 1px 2px 0 rgba(11,36,54,0.07),0 4px 20px -8px rgba(11,36,54,0.10)',
+			'elevation-md': '0 2px 4px -1px rgba(11,36,54,0.06),0 8px 28px -10px rgba(11,36,54,0.14)',
+			'elevation-lg': '0 2px 8px 0 rgba(11,36,54,0.04),0 10px 40px -12px rgba(11,36,54,0.18)',
+			'elevation-xl': '0 4px 12px 0 rgba(11,36,54,0.05),0 20px 56px -16px rgba(11,36,54,0.22)'
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			sm: 'var(--radius-sm)',
+  			xl: 'var(--radius-xl)'
   		},
   		keyframes: {
   			'accordion-down': {

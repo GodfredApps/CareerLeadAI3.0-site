@@ -36,21 +36,21 @@ export function Navbar() {
   const navItems = getNavItems()
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-slate-950/80 transition-colors">
+      <div className="container flex h-[4.5rem] items-center justify-between py-2">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <Link href="/" className="flex items-center gap-1">
-            <div className="relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="relative h-11 w-11 flex-shrink-0">
               <Image
                 src={IMAGES.logo}
                 alt="CareerLead AI Logo"
                 fill
-                className="rounded-lg object-contain"
+                className="rounded-xl object-contain"
                 priority
               />
             </div>
-            <span className="font-bold text-lg sm:text-xl">CareerLead AI</span>
+            <span className="text-lg font-black tracking-tight text-slate-950 dark:text-white">CareerLead AI</span>
           </Link>
         </div>
 
@@ -62,7 +62,7 @@ export function Navbar() {
                 <NavigationMenuItem key={item.name}>
                   <Link href={item.href} legacyBehavior passHref>
                     <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
+                      className={`${navigationMenuTriggerStyle()} rounded-full bg-transparent text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-teal-950/50 hover:text-teal-800 dark:hover:text-teal-300 data-[active]:bg-teal-50 dark:data-[active]:bg-teal-950/60 data-[active]:text-teal-800 dark:data-[active]:text-teal-300`}
                       active={pathname === item.href}
                     >
                       {item.name}
@@ -76,11 +76,11 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <ModeToggle />
             <div className="flex items-center gap-2">
-              <Button asChild variant="ghost">
+              <Button asChild variant="ghost" className="rounded-full font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
                 <a href={`${process.env.NEXT_PUBLIC_APP_URL}/login`}>Sign In</a>
               </Button>
-              <Button asChild className="bg-primary hover:bg-primary/90">
-                <a href={`${process.env.NEXT_PUBLIC_APP_URL}/signup`}>Sign Up</a>
+              <Button asChild className="rounded-full bg-teal-600 px-5 font-bold text-white shadow-sm hover:bg-teal-700">
+                <a href={`${process.env.NEXT_PUBLIC_APP_URL}/signup`}>Start Free</a>
               </Button>
             </div>
           </div>
@@ -91,7 +91,7 @@ export function Navbar() {
           <ModeToggle />
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="rounded-full">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
@@ -137,7 +137,7 @@ export function Navbar() {
                   asChild
                   onClick={() => setIsOpen(false)}
                 >
-                  <a href={`${process.env.NEXT_PUBLIC_APP_URL}/signup`}>Sign Up</a>
+                  <a href={`${process.env.NEXT_PUBLIC_APP_URL}/signup`}>Start Free</a>
                 </Button>
               </div>
             </SheetContent>
