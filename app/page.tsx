@@ -16,6 +16,7 @@ import {
   Users,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { HeroDashboardPreview } from "@/components/marketing/hero-dashboard-preview"
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.careerlead.ai"
 
@@ -96,25 +97,26 @@ const proof = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-white text-slate-950">
-      <section className="relative min-h-[calc(100vh-4rem)] overflow-hidden bg-slate-950">
-        <Image
-          src="/dashboard-preview.jpg"
-          alt="CareerLead AI dashboard preview"
-          fill
-          priority
-          className="object-cover opacity-28"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.98)_0%,rgba(15,23,42,0.9)_44%,rgba(15,23,42,0.62)_100%)]" />
-        <div className="absolute inset-0 opacity-[0.06] bg-[url('/grid.svg')]" />
+      <section className="relative min-h-[calc(100vh-4.5rem)] overflow-hidden bg-slate-950">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(13,148,136,0.25)_0%,rgba(15,23,42,0.98)_55%,rgba(15,23,42,1)_100%)]" />
+        <div className="absolute inset-0 opacity-[0.05] bg-[url('/grid.svg')]" />
 
-        <div className="container relative z-10 flex items-center px-4 py-16 md:px-6 lg:min-h-[calc(100vh-4rem)] lg:py-20">
+        <div className="container relative z-10 flex items-center px-4 py-16 md:px-6 lg:min-h-[calc(100vh-4.5rem)] lg:py-20">
           <div className="grid w-full min-w-0 items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <div className="min-w-0 max-w-3xl">
-              <h1 className="text-4xl font-black leading-[1.02] tracking-tight text-white sm:text-5xl sm:leading-[0.96] md:text-7xl lg:text-8xl">
-                Build a career path that fits the market.
+              <div className="inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-4 py-1.5 text-xs font-bold text-teal-300 backdrop-blur mb-6">
+                <Sparkles className="h-3.5 w-3.5 text-teal-400" />
+                <span>Next-Gen Career Intelligence Platform</span>
+              </div>
+
+              <h1 className="text-4xl font-black leading-[1.02] tracking-tight text-white sm:text-5xl sm:leading-[0.96] md:text-7xl lg:text-7xl">
+                Build a career path that{" "}
+                <span className="bg-gradient-to-r from-teal-400 via-emerald-300 to-cyan-400 bg-clip-text text-transparent">
+                  fits the market.
+                </span>
               </h1>
 
-              <p className="mt-7 max-w-2xl text-lg font-medium leading-8 text-white/70 md:text-xl">
+              <p className="mt-7 max-w-2xl text-lg font-medium leading-8 text-slate-300 md:text-xl">
                 CareerLead AI turns your background, values, skills, and goals into a practical
                 career plan, then helps you improve the CV, skills, and confidence to execute it.
               </p>
@@ -123,7 +125,7 @@ export default function Home() {
                 <Button
                   asChild
                   size="lg"
-                  className="h-14 rounded-full bg-teal-600 px-7 text-base font-bold text-white shadow-xl shadow-teal-950/40 hover:bg-teal-700"
+                  className="h-14 rounded-full bg-gradient-to-r from-teal-600 to-emerald-600 px-8 text-base font-bold text-white shadow-xl shadow-teal-950/60 hover:from-teal-500 hover:to-emerald-500 transition-all duration-300 hover:scale-[1.02]"
                 >
                   <a href={`${appUrl}/signup`}>
                     Start free
@@ -134,40 +136,26 @@ export default function Home() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-14 rounded-full border-white/25 bg-white/8 px-7 text-base font-bold text-white hover:bg-white hover:text-slate-950"
+                  className="h-14 rounded-full border-white/20 bg-white/5 px-8 text-base font-bold text-white backdrop-blur hover:bg-white hover:text-slate-950 transition-all duration-300"
                 >
                   <Link href="/how-it-works">See how it works</Link>
                 </Button>
               </div>
 
-              <div className="mt-10 grid max-w-2xl grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-3">
+              <div className="mt-12 grid max-w-2xl grid-cols-1 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-3 shadow-xl backdrop-blur">
                 {metrics.map(metric => (
-                  <div key={metric.label} className="min-w-0 bg-slate-950/55 p-4">
-                    <p className="text-2xl font-black text-white md:text-3xl">{metric.value}</p>
-                    <p className="mt-1 text-xs font-medium leading-5 text-white/55">{metric.label}</p>
+                  <div key={metric.label} className="min-w-0 bg-slate-950/80 p-5 transition-colors hover:bg-slate-900/90">
+                    <p className="text-2xl font-black text-white md:text-3xl bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent">
+                      {metric.value}
+                    </p>
+                    <p className="mt-1 text-xs font-semibold leading-5 text-teal-300/80 uppercase tracking-wider">{metric.label}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className="hidden lg:block">
-              <div className="relative ml-auto max-w-[34rem] overflow-hidden rounded-[2rem] border border-white/15 bg-white/10 p-3 shadow-2xl shadow-black/40">
-                <Image
-                  src="/dashboard-preview.jpg"
-                  alt="CareerLead AI dashboard interface"
-                  width={900}
-                  height={680}
-                  className="rounded-[1.35rem] border border-white/10 object-cover"
-                />
-                <div className="absolute bottom-8 left-8 right-8 rounded-2xl border border-white/15 bg-slate-950/78 p-5 backdrop-blur">
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-200">
-                    Today&apos;s focus
-                  </p>
-                  <p className="mt-2 text-lg font-bold text-white">
-                    Complete profile, compare 3 paths, prepare next application.
-                  </p>
-                </div>
-              </div>
+              <HeroDashboardPreview />
             </div>
           </div>
         </div>
@@ -195,15 +183,15 @@ export default function Home() {
             {audiences.map(({ eyebrow, title, body, icon: Icon }, index) => (
               <article
                 key={eyebrow}
-                className={`rounded-2xl border p-7 ${
+                className={`rounded-2xl border p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl ${
                   index === 1
-                    ? "border-teal-700 bg-slate-950 text-white"
-                    : "border-slate-200 bg-slate-50 text-slate-950"
+                    ? "border-teal-700 bg-slate-950 text-white shadow-teal-950/30 hover:border-teal-400"
+                    : "border-slate-200/80 bg-slate-50/50 text-slate-950 hover:border-teal-500/40 hover:bg-white"
                 }`}
               >
                 <div
                   className={`mb-8 flex h-12 w-12 items-center justify-center rounded-2xl ${
-                    index === 1 ? "bg-teal-500/15 text-teal-200" : "bg-teal-100 text-teal-700"
+                    index === 1 ? "bg-teal-500/15 text-teal-200" : "bg-teal-100/80 text-teal-700"
                   }`}
                 >
                   <Icon className="h-6 w-6" />
@@ -251,7 +239,7 @@ export default function Home() {
 
             <div className="space-y-4">
               {workflow.map(({ title, body, icon: Icon }, index) => (
-                <article key={title} className="grid grid-cols-[3.5rem_1fr] gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:grid-cols-[4rem_1fr] sm:gap-5 sm:p-6">
+                <article key={title} className="grid grid-cols-[3.5rem_1fr] gap-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm sm:grid-cols-[4rem_1fr] sm:gap-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-teal-500/30">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white sm:h-14 sm:w-14">
                     <Icon className="h-6 w-6 text-teal-300" />
                   </div>
@@ -282,7 +270,7 @@ export default function Home() {
 
           <div className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-slate-200 bg-slate-200 md:grid-cols-2 lg:grid-cols-4">
             {features.map(({ title, body, icon: Icon }) => (
-              <article key={title} className="bg-white p-7">
+              <article key={title} className="bg-white p-7 transition-all duration-300 hover:bg-slate-50/80 hover:scale-[1.01]">
                 <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
                   <Icon className="h-6 w-6" />
                 </div>
