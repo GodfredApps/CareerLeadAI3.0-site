@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { PartnerRequestModal } from './partner-request-modal'
 import { createClient } from '@supabase/supabase-js'
 
+import { INITIAL_OFFICIAL_PARTNERS, DEFAULT_PARTNER_LOGOS } from '@/lib/partner-store'
+
 interface Partner {
   id?: string
   name: string
@@ -15,26 +17,14 @@ interface Partner {
   website_url?: string
 }
 
-const DEFAULT_PARTNERS: Partner[] = [
-  {
-    name: 'Empowered Vision Initiative',
-    category: 'Youth Leadership & Career Empowerment',
-    badge: 'Foundational Partner',
-    logo_url: '',
-  },
-  {
-    name: 'AI Leap Africa',
-    category: 'AI Ecosystem & Skills Acceleration',
-    badge: 'Innovation Partner',
-    logo_url: '',
-  },
-  {
-    name: 'Diginno Technologies Africa',
-    category: 'Digital Transformation & Tech Skills',
-    badge: 'Enterprise Partner',
-    logo_url: '',
-  },
-]
+const DEFAULT_PARTNERS: Partner[] = Object.values(INITIAL_OFFICIAL_PARTNERS).map(p => ({
+  id: p.id,
+  name: p.company_name,
+  category: p.partner_type,
+  badge: p.badge,
+  logo_url: p.logo_url || DEFAULT_PARTNER_LOGOS[p.company_name.toLowerCase().trim()] || '',
+  website_url: p.website_url,
+}))
 
 export function TrustedBySection() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -44,40 +34,16 @@ export function TrustedBySection() {
   useEffect(() => {
     async function fetchLivePartners() {
       try {
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://skecspzevwmempzsywwp.supabase.co'
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWNzcHpldndtZW1wenN5d3dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNjUwMTAsImV4cCI6MjA1Njg0MTAxMH0.k8-F4tU-cW'
-        const supabase = createClient(url, key)
-
-        const { data, error } = await supabase
-          .from('employer_requests')
-          .select('id, company_name, partner_type, badge, logo_url, website_url, status')
-          .eq('status', 'APPROVED')
-          .order('submitted_at', { ascending: false })
-
-        if (!error && data && data.length > 0) {
-          const formatted: Partner[] = data.map((p: any) => ({
-            id: p.id,
-            name: p.company_name,
-            category: p.partner_type || 'Hiring Partner',
-            badge: p.badge || 'Official Partner',
-            logo_url: p.logo_url || '',
-            website_url: p.website_url || '',
-          }))
-
-          // Merge DB items with default partners if DB doesn't have all default partners
-          const dbNames = new Set(formatted.map(f => f.name.toLowerCase().trim()))
-          const merged = [...formatted]
-
-          DEFAULT_PARTNERS.forEach(def => {
-            if (!dbNames.has(def.name.toLowerCase().trim())) {
-              merged.push(def)
-            }
-          })
-
-          setPartners(merged)
+        const res = await fetch('/api/partners/approved')
+        if (res.ok) {
+          const data = await res.json()
+          if (data.partners && data.partners.length > 0) {
+            setPartners(data.partners)
+            return
+          }
         }
       } catch (err) {
-        console.warn('Could not fetch live partners from Supabase, using defaults:', err)
+        console.warn('Could not fetch approved partners API, using default store list:', err)
       } finally {
         setLoading(false)
       }
