@@ -1,18 +1,90 @@
 'use client'
 
-import React, { useState } from 'react'
-import { ArrowRight, Building2, HeartHandshake, ShieldCheck, Sparkles, Star } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { ArrowRight, Building2, HeartHandshake, ShieldCheck, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PartnerRequestModal } from './partner-request-modal'
+import { createClient } from '@supabase/supabase-js'
 
-const PARTNER_LOGOS = [
-  { name: 'Empowered Vision Initiative', category: 'Youth Leadership & Career Empowerment', badge: 'Foundational Partner' },
-  { name: 'AI Leap Africa', category: 'AI Ecosystem & Skills Acceleration', badge: 'Innovation Partner' },
-  { name: 'Diginno Technologies Africa', category: 'Digital Transformation & Tech Skills', badge: 'Enterprise Partner' },
+interface Partner {
+  id?: string
+  name: string
+  category: string
+  badge: string
+  logo_url?: string
+  website_url?: string
+}
+
+const DEFAULT_PARTNERS: Partner[] = [
+  {
+    name: 'Empowered Vision Initiative',
+    category: 'Youth Leadership & Career Empowerment',
+    badge: 'Foundational Partner',
+    logo_url: '',
+  },
+  {
+    name: 'AI Leap Africa',
+    category: 'AI Ecosystem & Skills Acceleration',
+    badge: 'Innovation Partner',
+    logo_url: '',
+  },
+  {
+    name: 'Diginno Technologies Africa',
+    category: 'Digital Transformation & Tech Skills',
+    badge: 'Enterprise Partner',
+    logo_url: '',
+  },
 ]
 
 export function TrustedBySection() {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [partners, setPartners] = useState<Partner[]>(DEFAULT_PARTNERS)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchLivePartners() {
+      try {
+        const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://skecspzevwmempzsywwp.supabase.co'
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWNzcHpldndtZW1wenN5d3dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNjUwMTAsImV4cCI6MjA1Njg0MTAxMH0.k8-F4tU-cW'
+        const supabase = createClient(url, key)
+
+        const { data, error } = await supabase
+          .from('employer_requests')
+          .select('id, company_name, partner_type, badge, logo_url, website_url, status')
+          .eq('status', 'APPROVED')
+          .order('submitted_at', { ascending: false })
+
+        if (!error && data && data.length > 0) {
+          const formatted: Partner[] = data.map((p: any) => ({
+            id: p.id,
+            name: p.company_name,
+            category: p.partner_type || 'Hiring Partner',
+            badge: p.badge || 'Official Partner',
+            logo_url: p.logo_url || '',
+            website_url: p.website_url || '',
+          }))
+
+          // Merge DB items with default partners if DB doesn't have all default partners
+          const dbNames = new Set(formatted.map(f => f.name.toLowerCase().trim()))
+          const merged = [...formatted]
+
+          DEFAULT_PARTNERS.forEach(def => {
+            if (!dbNames.has(def.name.toLowerCase().trim())) {
+              merged.push(def)
+            }
+          })
+
+          setPartners(merged)
+        }
+      } catch (err) {
+        console.warn('Could not fetch live partners from Supabase, using defaults:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchLivePartners()
+  }, [])
 
   return (
     <section className="border-y border-slate-200/80 bg-gradient-to-b from-slate-50/70 via-white to-teal-50/20 py-16 md:py-24 relative overflow-hidden">
@@ -48,24 +120,40 @@ export function TrustedBySection() {
 
         {/* Partner Logo Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {PARTNER_LOGOS.map(partner => (
+          {partners.map(partner => (
             <div
               key={partner.name}
               className="group relative flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-teal-500/40 hover:shadow-lg"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="p-2.5 rounded-xl bg-teal-50 text-teal-700 group-hover:bg-teal-600 group-hover:text-white transition-colors">
-                    <Building2 className="h-5 w-5" />
-                  </div>
-                  <span className="text-[11px] font-bold text-teal-800 bg-teal-50 border border-teal-100 group-hover:bg-teal-100 px-2.5 py-0.5 rounded-full transition-colors">
+                  {partner.logo_url ? (
+                    <div className="h-10 w-auto max-w-[140px] flex items-center justify-start">
+                      <img
+                        src={partner.logo_url}
+                        alt={partner.name}
+                        className="h-full w-auto object-contain max-h-10"
+                        onError={e => {
+                          ;(e.target as HTMLElement).style.display = 'none'
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="p-2.5 rounded-xl bg-teal-50 text-teal-700 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                      <Building2 className="h-5 w-5" />
+                    </div>
+                  )}
+
+                  <span className="text-[11px] font-bold text-teal-800 bg-teal-50 border border-teal-100 group-hover:bg-teal-100 px-2.5 py-0.5 rounded-full transition-colors whitespace-nowrap">
                     {partner.badge}
                   </span>
                 </div>
+
                 <h3 className="text-base font-black text-slate-900 leading-snug group-hover:text-teal-800 transition-colors">
                   {partner.name}
                 </h3>
               </div>
+
               <p className="mt-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 {partner.category}
               </p>
