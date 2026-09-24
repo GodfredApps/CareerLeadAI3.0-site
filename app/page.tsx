@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { HeroDashboardPreview } from "@/components/marketing/hero-dashboard-preview"
+import { TrustedBySection } from "@/components/marketing/trusted-by-section"
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.careerlead.ai"
 
@@ -160,6 +161,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <TrustedBySection />
 
       <section className="border-b border-slate-200 bg-white py-20 md:py-28">
         <div className="container px-4 md:px-6">
