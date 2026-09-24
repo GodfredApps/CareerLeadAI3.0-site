@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { INITIAL_OFFICIAL_PARTNERS, DEFAULT_PARTNER_LOGOS } from '@/lib/partner-store'
+import { loadPersistedStore } from '@/lib/partner-store-server'
+import { INITIAL_OFFICIAL_PARTNERS } from '@/lib/partner-store'
 
 export const dynamic = 'force-static'
 
 export async function GET() {
-  const initialList = Object.values(INITIAL_OFFICIAL_PARTNERS)
+  const storeMap = loadPersistedStore()
+  const initialList = Array.from(storeMap.values())
   const initialMap = new Map(initialList.map(p => [p.company_name.toLowerCase().trim(), p]))
 
   try {
@@ -36,11 +38,11 @@ export async function GET() {
           }
         }
       } catch (adminErr) {
-        console.warn('[Approved Partners API] Admin API fallback fetch notice:', adminErr)
+        console.warn('[Approved Partners API] Admin API fallback notice:', adminErr)
       }
     }
 
-    // Combine live rows with default fallback partners
+    // Combine live rows with disk-persisted fallback partners
     const formatted = liveRows.map((p: any) => {
       const nameKey = (p.company_name || p.name || '').toLowerCase().trim()
       const fallback = initialMap.get(nameKey)
@@ -49,7 +51,7 @@ export async function GET() {
         name: p.company_name || p.name || fallback?.company_name || 'Partner',
         category: p.partner_type || fallback?.partner_type || 'Hiring Partner',
         badge: p.badge || fallback?.badge || 'Official Partner',
-        logo_url: p.logo_url || fallback?.logo_url || DEFAULT_PARTNER_LOGOS[nameKey] || '',
+        logo_url: p.logo_url || fallback?.logo_url || '',
         website_url: p.website_url || fallback?.website_url || '',
       }
     })
@@ -65,7 +67,7 @@ export async function GET() {
       }
     }
 
-    // Add remaining initial official partners if not present
+    // Add remaining disk/memory official partners
     for (const partner of initialList) {
       const normName = partner.company_name.toLowerCase().trim()
       if (!seenNames.has(normName)) {
@@ -75,7 +77,7 @@ export async function GET() {
           name: partner.company_name,
           category: partner.partner_type,
           badge: partner.badge,
-          logo_url: partner.logo_url || DEFAULT_PARTNER_LOGOS[normName] || '',
+          logo_url: partner.logo_url || '',
           website_url: partner.website_url,
         })
       }
@@ -94,7 +96,7 @@ export async function GET() {
         name: p.company_name,
         category: p.partner_type,
         badge: p.badge,
-        logo_url: p.logo_url || DEFAULT_PARTNER_LOGOS[p.company_name.toLowerCase().trim()] || '',
+        logo_url: p.logo_url || '',
         website_url: p.website_url,
       })),
     })
