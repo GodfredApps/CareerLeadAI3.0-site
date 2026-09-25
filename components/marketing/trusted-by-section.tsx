@@ -17,6 +17,8 @@ interface Partner {
   website_url?: string
 }
 
+const VALID_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWNzcHpldndtZW1wenN5d3dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzODAxMjMsImV4cCI6MjA2NDk1NjEyM30.cuuV3kY310jbibuQ2hLTHp5ELK5I7lA8vuzJpy5DLYg'
+
 const DEFAULT_PARTNERS: Partner[] = Object.values(INITIAL_OFFICIAL_PARTNERS).map(p => ({
   id: p.id,
   name: p.company_name,
@@ -26,6 +28,34 @@ const DEFAULT_PARTNERS: Partner[] = Object.values(INITIAL_OFFICIAL_PARTNERS).map
   website_url: p.website_url,
 }))
 
+function PartnerLogo({ logoUrl, name }: { logoUrl?: string; name: string }) {
+  const [imgError, setImgError] = useState(false)
+
+  useEffect(() => {
+    setImgError(false)
+  }, [logoUrl])
+
+  if (logoUrl && !imgError) {
+    return (
+      <div className="h-10 w-auto max-w-[140px] flex items-center justify-start">
+        <img
+          key={logoUrl}
+          src={logoUrl}
+          alt={name}
+          className="h-full w-auto object-contain max-h-10"
+          onError={() => setImgError(true)}
+        />
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-2.5 rounded-xl bg-teal-50 text-teal-700 group-hover:bg-teal-600 group-hover:text-white transition-colors">
+      <Building2 className="h-5 w-5" />
+    </div>
+  )
+}
+
 export function TrustedBySection() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [partners, setPartners] = useState<Partner[]>(DEFAULT_PARTNERS)
@@ -34,64 +64,42 @@ export function TrustedBySection() {
   useEffect(() => {
     async function fetchLivePartners() {
       try {
-        // 1. Fetch live cloud-persisted partner store from Supabase Storage
-        const cloudUrl = 'https://skecspzevwmempzsywwp.supabase.co/storage/v1/object/public/images/partner-store.json'
-        try {
-          const cloudRes = await fetch(cloudUrl, { cache: 'no-store' })
-          if (cloudRes.ok) {
-            const cloudData = await cloudRes.json()
-            if (cloudData && typeof cloudData === 'object') {
-              const list = Object.values(cloudData) as any[]
-              const approved: Partner[] = list
-                .filter((r: any) => r.status === 'APPROVED')
-                .map((p: any) => ({
-                  id: p.id,
-                  name: p.company_name,
-                  category: p.partner_type || 'Hiring Partner',
-                  badge: p.badge || 'Official Partner',
-                  logo_url: p.logo_url || '',
-                  website_url: p.website_url || '',
-                }))
+        // 1. Direct real-time query to Supabase Database employer_requests table
+        const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://skecspzevwmempzsywwp.supabase.co'
+        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || VALID_ANON_KEY
+        const supabase = createClient(url, key)
 
-              if (approved.length > 0) {
-                setPartners(approved)
-                return
-              }
+        const { data: dbData, error: dbErr } = await supabase
+          .from('employer_requests')
+          .select('id, company_name, partner_type, badge, logo_url, website_url, status')
+          .eq('status', 'APPROVED')
+          .order('submitted_at', { ascending: false })
+
+        if (!dbErr && dbData && dbData.length > 0) {
+          const dbFormatted: Partner[] = dbData.map((p: any) => ({
+            id: p.id,
+            name: p.company_name,
+            category: p.partner_type || 'Hiring Partner',
+            badge: p.badge || 'Official Partner',
+            logo_url: p.logo_url || '',
+            website_url: p.website_url || '',
+          }))
+
+          // Merge DB items with default partners for any missing default partners
+          const dbNames = new Set(dbFormatted.map(f => f.name.toLowerCase().trim()))
+          const merged = [...dbFormatted]
+
+          DEFAULT_PARTNERS.forEach(def => {
+            if (!dbNames.has(def.name.toLowerCase().trim())) {
+              merged.push(def)
             }
-          }
-        } catch (cloudErr) {
-          console.warn('[TrustedBySection] Cloud storage fetch notice:', cloudErr)
+          })
+
+          setPartners(merged)
+          return
         }
 
-        // 2. Try fetching from Admin API if running
-        const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:3001'
-        try {
-          const adminRes = await fetch(`${adminUrl}/api/partners/requests`, { cache: 'no-store' })
-          if (adminRes.ok) {
-            const adminData = await adminRes.json()
-            if (adminData.requests && adminData.requests.length > 0) {
-              const approved: Partner[] = adminData.requests
-                .filter((r: any) => r.status === 'APPROVED')
-                .map((p: any) => ({
-                  id: p.id,
-                  name: p.company_name,
-                  category: p.partner_type || 'Hiring Partner',
-                  badge: p.badge || 'Official Partner',
-                  logo_url: p.logo_url || '',
-                  website_url: p.website_url || '',
-                }))
-
-              if (approved.length > 0) {
-                setPartners(approved)
-                return
-              }
-            }
-          }
-        } catch (adminErr) {
-          // Ignore connection errors
-        }
-
-        // 3. Try fetching from /api/partners/approved
+        // 2. Fallback to /api/partners/approved
         const res = await fetch('/api/partners/approved')
         if (res.ok) {
           const data = await res.json()
@@ -101,7 +109,7 @@ export function TrustedBySection() {
           }
         }
       } catch (err) {
-        console.warn('Could not fetch live partners, using fallback list:', err)
+        console.warn('Could not fetch live database partners, using default list:', err)
       } finally {
         setLoading(false)
       }
@@ -151,22 +159,7 @@ export function TrustedBySection() {
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-4">
-                  {partner.logo_url ? (
-                    <div className="h-10 w-auto max-w-[140px] flex items-center justify-start">
-                      <img
-                        src={partner.logo_url}
-                        alt={partner.name}
-                        className="h-full w-auto object-contain max-h-10"
-                        onError={e => {
-                          ;(e.target as HTMLElement).style.display = 'none'
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="p-2.5 rounded-xl bg-teal-50 text-teal-700 group-hover:bg-teal-600 group-hover:text-white transition-colors">
-                      <Building2 className="h-5 w-5" />
-                    </div>
-                  )}
+                  <PartnerLogo logoUrl={partner.logo_url} name={partner.name} />
 
                   <span className="text-[11px] font-bold text-teal-800 bg-teal-50 border border-teal-100 group-hover:bg-teal-100 px-2.5 py-0.5 rounded-full transition-colors whitespace-nowrap">
                     {partner.badge}

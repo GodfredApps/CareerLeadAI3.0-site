@@ -12,7 +12,7 @@ export async function GET() {
 
   try {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://skecspzevwmempzsywwp.supabase.co'
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWNzcHpldndtZW1wenN5d3dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNjUwMTAsImV4cCI6MjA1Njg0MTAxMH0.k8-F4tU-cW'
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWNzcHpldndtZW1wenN5d3dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzODAxMjMsImV4cCI6MjA2NDk1NjEyM30.cuuV3kY310jbibuQ2hLTHp5ELK5I7lA8vuzJpy5DLYg'
     const supabase = createClient(url, key)
 
     let liveRows: any[] = []
