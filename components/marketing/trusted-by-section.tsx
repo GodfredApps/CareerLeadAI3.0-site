@@ -34,7 +34,36 @@ export function TrustedBySection() {
   useEffect(() => {
     async function fetchLivePartners() {
       try {
-        // 1. Try fetching from local Admin API if running
+        // 1. Fetch live cloud-persisted partner store from Supabase Storage
+        const cloudUrl = 'https://skecspzevwmempzsywwp.supabase.co/storage/v1/object/public/images/partner-store.json'
+        try {
+          const cloudRes = await fetch(cloudUrl, { cache: 'no-store' })
+          if (cloudRes.ok) {
+            const cloudData = await cloudRes.json()
+            if (cloudData && typeof cloudData === 'object') {
+              const list = Object.values(cloudData) as any[]
+              const approved: Partner[] = list
+                .filter((r: any) => r.status === 'APPROVED')
+                .map((p: any) => ({
+                  id: p.id,
+                  name: p.company_name,
+                  category: p.partner_type || 'Hiring Partner',
+                  badge: p.badge || 'Official Partner',
+                  logo_url: p.logo_url || '',
+                  website_url: p.website_url || '',
+                }))
+
+              if (approved.length > 0) {
+                setPartners(approved)
+                return
+              }
+            }
+          }
+        } catch (cloudErr) {
+          console.warn('[TrustedBySection] Cloud storage fetch notice:', cloudErr)
+        }
+
+        // 2. Try fetching from Admin API if running
         const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL || 'http://localhost:3001'
         try {
           const adminRes = await fetch(`${adminUrl}/api/partners/requests`, { cache: 'no-store' })
@@ -59,10 +88,10 @@ export function TrustedBySection() {
             }
           }
         } catch (adminErr) {
-          // Ignore connection errors if admin server isn't running on same machine
+          // Ignore connection errors
         }
 
-        // 2. Try fetching from /api/partners/approved
+        // 3. Try fetching from /api/partners/approved
         const res = await fetch('/api/partners/approved')
         if (res.ok) {
           const data = await res.json()
@@ -70,28 +99,6 @@ export function TrustedBySection() {
             setPartners(data.partners)
             return
           }
-        }
-
-        // 3. Direct query to Supabase
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://skecspzevwmempzsywwp.supabase.co'
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWNzcHpldndtZW1wenN5d3dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNjUwMTAsImV4cCI6MjA1Njg0MTAxMH0.k8-F4tU-cW'
-        const supabase = createClient(url, key)
-
-        const { data: dbData, error: dbErr } = await supabase
-          .from('employer_requests')
-          .select('id, company_name, partner_type, badge, logo_url, website_url, status')
-          .eq('status', 'APPROVED')
-
-        if (!dbErr && dbData && dbData.length > 0) {
-          const formatted: Partner[] = dbData.map((p: any) => ({
-            id: p.id,
-            name: p.company_name,
-            category: p.partner_type || 'Hiring Partner',
-            badge: p.badge || 'Official Partner',
-            logo_url: p.logo_url || '',
-            website_url: p.website_url || '',
-          }))
-          setPartners(formatted)
         }
       } catch (err) {
         console.warn('Could not fetch live partners, using fallback list:', err)
