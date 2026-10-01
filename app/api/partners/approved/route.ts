@@ -11,9 +11,17 @@ export async function GET() {
   const initialMap = new Map(initialList.map(p => [p.company_name.toLowerCase().trim(), p]))
 
   try {
+    // Runs once at build time (force-static) and is emitted as a static JSON file,
+    // so the service role never reaches the browser. employer_requests is not
+    // readable with the anon key: it holds partner contact details.
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://skecspzevwmempzsywwp.supabase.co'
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWNzcHpldndtZW1wenN5d3dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzODAxMjMsImV4cCI6MjA2NDk1NjEyM30.cuuV3kY310jbibuQ2hLTHp5ELK5I7lA8vuzJpy5DLYg'
-    const supabase = createClient(url, key)
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!key) {
+      throw new Error('SUPABASE_SERVICE_ROLE_KEY is required at build time to list approved partners')
+    }
+    const supabase = createClient(url, key, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    })
 
     let liveRows: any[] = []
 

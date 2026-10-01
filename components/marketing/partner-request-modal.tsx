@@ -55,7 +55,10 @@ export function PartnerRequestModal({ isOpen, onClose }: PartnerRequestModalProp
     setErrorMessage('')
 
     try {
-      const res = await fetch('/api/partners/request', {
+      // This site is a static export, so it has no API routes at runtime. The main
+      // app owns the endpoint (CORS allows careerlead.ai).
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://app.careerlead.ai'
+      const res = await fetch(`${appUrl}/api/employers/request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

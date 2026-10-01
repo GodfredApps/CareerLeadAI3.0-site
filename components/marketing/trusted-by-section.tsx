@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { ArrowRight, Building2, HeartHandshake, ShieldCheck, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PartnerRequestModal } from './partner-request-modal'
-import { createClient } from '@supabase/supabase-js'
 
 import { INITIAL_OFFICIAL_PARTNERS } from '@/lib/partner-store'
 
@@ -16,8 +15,6 @@ interface Partner {
   logo_url?: string
   website_url?: string
 }
-
-const VALID_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrZWNzcHpldndtZW1wenN5d3dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzODAxMjMsImV4cCI6MjA2NDk1NjEyM30.cuuV3kY310jbibuQ2hLTHp5ELK5I7lA8vuzJpy5DLYg'
 
 const DEFAULT_PARTNERS: Partner[] = Object.values(INITIAL_OFFICIAL_PARTNERS).map(p => ({
   id: p.id,
@@ -64,42 +61,9 @@ export function TrustedBySection() {
   useEffect(() => {
     async function fetchLivePartners() {
       try {
-        // 1. Direct real-time query to Supabase Database employer_requests table
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://skecspzevwmempzsywwp.supabase.co'
-        const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || VALID_ANON_KEY
-        const supabase = createClient(url, key)
-
-        const { data: dbData, error: dbErr } = await supabase
-          .from('employer_requests')
-          .select('id, company_name, partner_type, badge, logo_url, website_url, status')
-          .eq('status', 'APPROVED')
-          .order('submitted_at', { ascending: false })
-
-        if (!dbErr && dbData && dbData.length > 0) {
-          const dbFormatted: Partner[] = dbData.map((p: any) => ({
-            id: p.id,
-            name: p.company_name,
-            category: p.partner_type || 'Hiring Partner',
-            badge: p.badge || 'Official Partner',
-            logo_url: p.logo_url || '',
-            website_url: p.website_url || '',
-          }))
-
-          // Merge DB items with default partners for any missing default partners
-          const dbNames = new Set(dbFormatted.map(f => f.name.toLowerCase().trim()))
-          const merged = [...dbFormatted]
-
-          DEFAULT_PARTNERS.forEach(def => {
-            if (!dbNames.has(def.name.toLowerCase().trim())) {
-              merged.push(def)
-            }
-          })
-
-          setPartners(merged)
-          return
-        }
-
-        // 2. Fallback to /api/partners/approved
+        // Approved partners are snapshotted at build time by app/api/partners/approved
+        // (service role, public columns only). employer_requests itself is not
+        // anon-readable because it holds partner contact details.
         const res = await fetch('/api/partners/approved')
         if (res.ok) {
           const data = await res.json()
