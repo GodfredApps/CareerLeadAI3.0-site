@@ -16,25 +16,27 @@ import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import { IMAGES } from '@/lib/supabase-storage'
 import { ModeToggle } from '@/components/mode-toggle'
+import {
+  AUTH_LINKS,
+  PUBLIC_NAV_LINKS,
+  isActiveLink,
+  resolveSiteHref,
+} from '@/lib/site-nav'
+
+const CURRENT_SITE = 'marketing' as const
+const SIGN_IN_HREF = resolveSiteHref(AUTH_LINKS.signIn, CURRENT_SITE)
+const SIGN_UP_HREF = resolveSiteHref(AUTH_LINKS.signUp, CURRENT_SITE)
 
 export function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = React.useState(false)
 
-  // Navigation items that are consistent for marketing site
-  const getNavItems = () => {
-    return [
-      { name: 'Home', href: '/' },
-      { name: 'How It Works', href: '/how-it-works' },
-      { name: 'Become a Coach', href: '/become-a-coach' },
-      { name: 'Blog', href: '/blog' },
-      { name: "What's New", href: '/whats-new' },
-      { name: 'About', href: '/about' },
-      { name: 'FAQ', href: '/faq' },
-    ]
-  }
-
-  const navItems = getNavItems()
+  // Shared with the main app's public navbar via lib/site-nav.ts
+  const navItems = PUBLIC_NAV_LINKS.map(link => ({
+    name: link.name,
+    href: resolveSiteHref(link, CURRENT_SITE),
+    active: isActiveLink(link, CURRENT_SITE, pathname),
+  }))
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl supports-[backdrop-filter]:bg-white/80 dark:supports-[backdrop-filter]:bg-slate-950/80 transition-colors">
@@ -56,7 +58,7 @@ export function Navbar() {
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden xl:flex items-center gap-4">
           <NavigationMenu>
             <NavigationMenuList>
               {navItems.map(item => (
@@ -64,7 +66,7 @@ export function Navbar() {
                   <Link href={item.href} legacyBehavior passHref>
                     <NavigationMenuLink
                       className={`${navigationMenuTriggerStyle()} rounded-full bg-transparent text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-teal-50 dark:hover:bg-teal-950/50 hover:text-teal-800 dark:hover:text-teal-300 data-[active]:bg-teal-50 dark:data-[active]:bg-teal-950/60 data-[active]:text-teal-800 dark:data-[active]:text-teal-300`}
-                      active={pathname === item.href}
+                      active={item.active}
                     >
                       {item.name}
                     </NavigationMenuLink>
@@ -78,17 +80,17 @@ export function Navbar() {
             <ModeToggle />
             <div className="flex items-center gap-2">
               <Button asChild variant="ghost" className="rounded-full font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
-                <a href={`${process.env.NEXT_PUBLIC_APP_URL}/login`}>Sign In</a>
+                <a href={SIGN_IN_HREF}>{AUTH_LINKS.signIn.name}</a>
               </Button>
               <Button asChild className="rounded-full bg-teal-600 px-5 font-bold text-white shadow-sm hover:bg-teal-700">
-                <a href={`${process.env.NEXT_PUBLIC_APP_URL}/signup`}>Start Free</a>
+                <a href={SIGN_UP_HREF}>{AUTH_LINKS.signUp.name}</a>
               </Button>
             </div>
           </div>
         </div>
 
         {/* Mobile Navigation */}
-        <div className="flex md:hidden items-center gap-4">
+        <div className="flex xl:hidden items-center gap-4">
           <ModeToggle />
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
@@ -131,14 +133,14 @@ export function Navbar() {
                   asChild
                   onClick={() => setIsOpen(false)}
                 >
-                  <a href={`${process.env.NEXT_PUBLIC_APP_URL}/login`}>Sign In</a>
+                  <a href={SIGN_IN_HREF}>{AUTH_LINKS.signIn.name}</a>
                 </Button>
                 <Button
                   className="justify-start bg-primary hover:bg-primary/90"
                   asChild
                   onClick={() => setIsOpen(false)}
                 >
-                  <a href={`${process.env.NEXT_PUBLIC_APP_URL}/signup`}>Start Free</a>
+                  <a href={SIGN_UP_HREF}>{AUTH_LINKS.signUp.name}</a>
                 </Button>
               </div>
             </SheetContent>

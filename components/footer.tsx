@@ -1,7 +1,13 @@
 import Link from "next/link"
 import Image from "next/image"
 import { IMAGES } from "@/lib/supabase-storage"
+import { FOOTER_SECTIONS, SOCIAL_LINKS, resolveSiteHref } from "@/lib/site-nav"
 
+const CURRENT_SITE = "marketing" as const
+const LINK_CLASS = "text-white/55 hover:text-white"
+const HEADING_CLASS = "mb-4 text-xs font-black uppercase tracking-[0.18em] text-teal-300"
+
+// Link lists come from lib/site-nav.ts, shared with the main app's footer.
 export default function Footer() {
   return (
     <footer className="bg-slate-950 text-white">
@@ -22,94 +28,30 @@ export default function Footer() {
               AI-powered career paths, resume guidance, and coaching for African professionals.
             </p>
           </div>
+          {FOOTER_SECTIONS.map(section => (
+            <div key={section.title}>
+              <h3 className={HEADING_CLASS}>{section.title}</h3>
+              <ul className="space-y-2 text-sm">
+                {section.links.map(link => (
+                  <li key={link.name}>
+                    <Link href={resolveSiteHref(link, CURRENT_SITE)} className={LINK_CLASS}>
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
           <div>
-            <h3 className="mb-4 text-xs font-black uppercase tracking-[0.18em] text-teal-300">Platform</h3>
+            <h3 className={HEADING_CLASS}>Connect</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/how-it-works" className="text-white/55 hover:text-white">
-                  How It Works
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className="text-white/55 hover:text-white">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/whats-new" className="text-white/55 hover:text-white">
-                  What's New
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-white/55 hover:text-white">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="text-white/55 hover:text-white">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-white/55 hover:text-white">
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-4 text-xs font-black uppercase tracking-[0.18em] text-teal-300">Legal</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/privacy" className="text-white/55 hover:text-white">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-white/55 hover:text-white">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/cookies" className="text-white/55 hover:text-white">
-                  Cookie Policy
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-4 text-xs font-black uppercase tracking-[0.18em] text-teal-300">Connect</h3>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <a
-                  href="https://x.com/careerlead_ai"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-white/55 hover:text-white"
-                >
-                  Twitter
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.linkedin.com/company/careerlead-ai"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-white/55 hover:text-white"
-                >
-                  LinkedIn
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.instagram.com/careerlead.ai/"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-white/55 hover:text-white"
-                >
-                  Instagram
-                </a>
-              </li>
+              {SOCIAL_LINKS.map(link => (
+                <li key={link.name}>
+                  <a href={link.href} target="_blank" rel="noreferrer" className={LINK_CLASS}>
+                    {link.name}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
