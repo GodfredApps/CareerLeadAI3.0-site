@@ -43,8 +43,6 @@ export const PUBLIC_NAV_LINKS: readonly SiteLink[] = [
   { name: 'Become a Coach', site: 'marketing', path: '/become-a-coach/' },
   { name: 'Blog', site: 'marketing', path: '/blog/' },
   { name: "What's New", site: 'marketing', path: '/whats-new/' },
-  { name: 'About', site: 'marketing', path: '/about/' },
-  { name: 'FAQ', site: 'marketing', path: '/faq/' },
 ]
 
 export const AUTH_LINKS: Readonly<Record<'signIn' | 'signUp', SiteLink>> = {
