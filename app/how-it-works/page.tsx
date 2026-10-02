@@ -1,17 +1,14 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 import { Compass, UserCircle, LineChart, MessageSquare, Lightbulb } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "How AI Career Coaching Works - Step-by-Step Guide | Ghana - Africa",
-  description: "Learn how CareerLead AI's revolutionary platform provides personalized career coaching, AI-generated career paths, and professional development for Ghana's workforce. Start your journey today.",
-  keywords: "AI career coaching, how AI coaching works, AI career guidance, career development process Ghana, AI career navigator, professional development Africa, career path generator",
-  openGraph: {
-    title: "How AI Career Coaching Works - Step-by-Step Guide | Ghana - Africa", 
-    description: "Learn how CareerLead AI's revolutionary platform provides personalized career coaching, AI-generated career paths, and professional development for Ghana's workforce.",
-    url: "https://careerlead.ai/how-it-works",
-    type: "website",
-  },
-}
+export const metadata: Metadata = pageMetadata({
+  path: "/how-it-works/",
+  title: "How CareerLead AI Works: AI Career Guidance in 3 Steps",
+  description:
+    "Not sure what career is right for you? Build your profile, get three AI career paths, then close skill gaps with AI CV review and career coaching.",
+  keywords: ["how AI career coaching works", "AI career path generator", "career development Ghana", "AI career guidance Africa"],
+})
 
 export default function HowItWorksPage() {
   return (

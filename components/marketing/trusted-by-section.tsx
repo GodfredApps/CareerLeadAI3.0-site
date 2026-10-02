@@ -38,7 +38,8 @@ function PartnerLogo({ logoUrl, name }: { logoUrl?: string; name: string }) {
         <img
           key={logoUrl}
           src={logoUrl}
-          alt={name}
+          alt={`${name} logo`}
+          loading="lazy"
           className="h-full w-auto object-contain max-h-10"
           onError={() => setImgError(true)}
         />

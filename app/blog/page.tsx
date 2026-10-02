@@ -1,5 +1,15 @@
+import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 import Link from 'next/link'
 import { getPublishedPosts } from '@/lib/supabase-blog'
+
+export const metadata: Metadata = pageMetadata({
+  path: "/blog/",
+  title: "Career Advice Blog: CVs, Jobs & Salaries in Africa | CareerLead AI",
+  description:
+    "Career advice for Africa: how to write a CV, remote jobs, highest paying jobs in Ghana, salary guides and in-demand skills for 2026.",
+  keywords: ["career advice", "how to write a CV", "remote jobs Africa", "highest paying jobs in Ghana", "in demand skills"],
+})
 
 export default async function BlogPage() {
   const posts = await getPublishedPosts()
@@ -9,10 +19,10 @@ export default async function BlogPage() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Career Insights Blog
+            Career Advice Blog for African Professionals
           </h1>
           <p className="text-xl text-gray-600">
-            Expert advice, career tips, and industry insights
+            CV tips, salary guides, remote jobs and in-demand skills for Ghana, Nigeria, Kenya and beyond
           </p>
         </div>
 
@@ -74,7 +84,7 @@ export default async function BlogPage() {
                           </div>
 
                           <Link
-                            href={`/blog/${post.slug}`}
+                            href={`/blog/${post.slug}/`}
                             className="mt-4 inline-block text-teal-600 hover:text-teal-700 font-medium text-sm"
                           >
                             Read More →
@@ -139,7 +149,7 @@ export default async function BlogPage() {
                         </div>
 
                         <Link
-                          href={`/blog/${post.slug}`}
+                          href={`/blog/${post.slug}/`}
                           className="mt-4 inline-block text-teal-600 hover:text-teal-700 font-medium text-sm"
                         >
                           Read More →

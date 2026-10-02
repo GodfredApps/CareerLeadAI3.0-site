@@ -7,6 +7,9 @@ import Footer from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { CookieBanner } from "@/components/ui/cookie-banner"
 import { AnalyticsTracker } from "@/components/analytics-tracker"
+import { JsonLd } from "@/components/json-ld"
+import { SITE_NAME, SITE_URL } from "@/lib/seo"
+import { SOCIAL_LINKS } from "@/lib/site-nav"
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -35,9 +38,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://careerlead.ai'),
-  alternates: {
-    canonical: '/',
-  },
   openGraph: {
     title: "CareerLead AI - AI-Powered Career Guidance",
     description: "Navigate your career path with AI-powered guidance tailored for Ghana and Africa",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'CareerLead AI - AI-Powered Career Guidance',
+        alt: 'CareerLead AI - AI-powered career guidance for Ghana and Africa',
       },
     ],
     locale: 'en_US',
@@ -56,6 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@careerlead_ai',
     title: "CareerLead AI - AI-Powered Career Guidance",
     description: "Navigate your career path with AI-powered guidance tailored for Ghana and Africa",
     images: ['/og-image.jpg'],
@@ -82,6 +83,44 @@ export const metadata: Metadata = {
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
+}
+
+const ORGANIZATION_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/logo.png`,
+    width: 512,
+    height: 512,
+  },
+  description: "AI-powered career guidance platform for professionals in Ghana and across Africa",
+  foundingDate: "2024",
+  areaServed: [
+    { "@type": "Country", name: "Ghana" },
+    { "@type": "Country", name: "Nigeria" },
+    { "@type": "Country", name: "Kenya" },
+    { "@type": "Continent", name: "Africa" },
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    email: "support@careerlead.ai",
+  },
+  sameAs: SOCIAL_LINKS.map((link) => link.href),
+}
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  publisher: { "@id": `${SITE_URL}/#organization` },
+  inLanguage: "en",
 }
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-PXPJZ6XC'
@@ -141,82 +180,7 @@ export default function RootLayout({
           </>
         )}
 
-        {/* Structured Data for Organization */}
-        <Script
-          id="structured-data-organization"
-          type="application/ld+json"
-          strategy="beforeInteractive"
-        >
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "CareerLead AI",
-            "description": "AI-powered career guidance platform for professionals in Ghana and Africa",
-            "url": "https://careerlead.ai",
-            "logo": "https://careerlead.ai/logo.png",
-            "foundingDate": "2024",
-            "founder": {
-              "@type": "Person",
-              "name": "CareerLead AI Team"
-            },
-            "areaServed": [
-              {
-                "@type": "Country",
-                "name": "Ghana"
-              },
-              {
-                "@type": "Continent",
-                "name": "Africa"
-              }
-            ],
-            "serviceType": "Career Coaching and Guidance",
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "contactType": "customer service",
-              "email": "support@careerlead.ai"
-            },
-            "sameAs": [
-              "https://www.linkedin.com/company/careerlead-ai",
-              "https://x.com/careerlead_ai",
-              "https://www.instagram.com/careerlead.ai/"
-            ]
-          })}
-        </Script>
-
-        {/* Structured Data for Service */}
-        <Script
-          id="structured-data-service"
-          type="application/ld+json"
-          strategy="beforeInteractive"
-        >
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Service",
-            "name": "AI-Powered Career Guidance",
-            "description": "Personalized career path recommendations and coaching using artificial intelligence",
-            "provider": {
-              "@type": "Organization",
-              "name": "CareerLead AI"
-            },
-            "areaServed": [
-              {
-                "@type": "Country",
-                "name": "Ghana"
-              },
-              {
-                "@type": "Continent",
-                "name": "Africa"
-              }
-            ],
-            "serviceType": "Career Development",
-            "offers": {
-              "@type": "Offer",
-              "description": "AI career analysis and personalized recommendations",
-              "price": "0",
-              "priceCurrency": "USD"
-            }
-          })}
-        </Script>
+        <JsonLd data={[ORGANIZATION_JSON_LD, WEBSITE_JSON_LD]} />
       </head>
       <body className={`${plusJakartaSans.variable} ${archivo.variable} font-sans antialiased`}>
         {/* Google Tag Manager (noscript) */}

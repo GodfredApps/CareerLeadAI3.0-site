@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 import { sanityClient, skillsQuery } from '@/lib/sanity'
 
 interface Skill {
@@ -8,6 +10,14 @@ interface Skill {
   description?: string
   demandLevel: string
 }
+
+// Thin, unlinked directory page: kept reachable but out of the index and sitemap.
+export const metadata: Metadata = pageMetadata({
+  path: "/skills/",
+  title: "Skills Directory | CareerLead AI",
+  description: "In-demand skills for professionals in Ghana and Africa.",
+  noIndex: true,
+})
 
 export default async function SkillsPage() {
   const skills: Skill[] = await sanityClient.fetch(skillsQuery)

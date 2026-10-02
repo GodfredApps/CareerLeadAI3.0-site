@@ -1,10 +1,13 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 import { Compass } from "lucide-react"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  path: "/privacy/",
   title: "Privacy Policy | CareerLead AI",
-  description: "Learn how CareerLead AI collects, uses, and protects your personal information.",
-}
+  description:
+    "How CareerLead AI collects, uses and protects your personal information.",
+})
 
 export default function PrivacyPolicyPage() {
   return (

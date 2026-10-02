@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 import React from "react"
 import Link from "next/link"
 import {
@@ -13,6 +15,14 @@ import {
   Zap,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+
+export const metadata: Metadata = pageMetadata({
+  path: "/become-a-coach/",
+  title: "Become a Career Coach & Mentor in Africa | CareerLead AI",
+  description:
+    "Offer career coaching services and mentorship to professionals in Ghana, Nigeria and Kenya. Set your own hours for mock interviews, CV reviews and strategy sessions.",
+  keywords: ["become a career coach", "career mentor", "career mentorship programs", "career coaching services", "career coach Ghana"],
+})
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.careerlead.ai"
 

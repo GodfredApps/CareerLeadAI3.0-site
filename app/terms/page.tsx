@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Terms of Service | CareerLead AI Ghana",
-  description: "Read CareerLead AI's terms of service for our AI career guidance platform serving professionals in Ghana and Africa.",
-  keywords: "terms of service, AI career coaching terms, CareerLead AI agreement Ghana",
-}
+export const metadata: Metadata = pageMetadata({
+  path: "/terms/",
+  title: "Terms of Service | CareerLead AI",
+  description:
+    "The terms of service for CareerLead AI, the AI career guidance platform for professionals in Ghana and Africa.",
+})
 
 export default function TermsPage() {
   return (

@@ -1,3 +1,5 @@
+import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -18,6 +20,14 @@ import {
 import { Button } from "@/components/ui/button"
 import { HeroDashboardPreview } from "@/components/marketing/hero-dashboard-preview"
 import { TrustedBySection } from "@/components/marketing/trusted-by-section"
+
+export const metadata: Metadata = pageMetadata({
+  path: "/",
+  title: "CareerLead AI: AI Career Coach & Career Paths for Africa",
+  description:
+    "Free AI career guidance for Africa: personalized career paths, AI CV review, skills assessments and career coaching for professionals in Ghana, Nigeria and Kenya.",
+  keywords: ["AI career coach", "career guidance", "AI career path", "CV review", "career coaching services", "jobs in Ghana", "remote jobs Africa"],
+})
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.careerlead.ai"
 
@@ -61,7 +71,7 @@ const workflow = [
   },
   {
     title: "Improve your proof",
-    body: "Use resume review, skill assessment, learning resources, and AI coaching to strengthen execution.",
+    body: "Use AI CV review, skills assessments, learning resources, and AI career coaching to strengthen execution.",
     icon: FileText,
   },
 ]
@@ -176,7 +186,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="max-w-2xl text-lg leading-8 text-slate-600">
-              The product is built for people making real career decisions in African markets:
+              CareerLead AI is career guidance built for people making real career decisions in African markets:
               early-career professionals entering competitive hiring funnels, mid-career people
               weighing a decisive move, and senior specialists positioning hard-won experience.
             </p>
@@ -227,8 +237,9 @@ export default function Home() {
                 From self-assessment to proof of readiness.
               </h2>
               <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
-                CareerLead should feel like a professional operating system for career growth:
-                focused, structured, and useful every time a user logs in.
+                Not sure what career is right for you? Build your profile, get AI career paths
+                matched to your skills, then use CV review, skills assessments and career coaching
+                to get ready for the roles you want.
               </p>
               <div className="mt-8 space-y-3">
                 {proof.map(item => (

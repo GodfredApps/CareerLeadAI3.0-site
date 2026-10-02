@@ -19,6 +19,7 @@ export interface BlogPost {
   reading_time: number | null
   published_at: string | null
   created_at: string
+  updated_at?: string | null
   featured: boolean
   content: TiptapDoc | null
   seo_title: string | null
@@ -80,4 +81,22 @@ export async function getPublishedSlugs(): Promise<string[]> {
     .eq('status', 'published')
 
   return (data ?? []).map((p: { slug: string }) => p.slug)
+}
+
+export interface SitemapPost {
+  slug: string
+  published_at: string | null
+  updated_at: string | null
+}
+
+/** Slugs and dates of all published posts, for sitemap.xml. */
+export async function getSitemapPosts(): Promise<SitemapPost[]> {
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('slug, published_at, updated_at')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+
+  if (error) throw new Error(error.message)
+  return (data ?? []) as SitemapPost[]
 }

@@ -1,7 +1,9 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { getPostBySlug, getPublishedSlugs } from '@/lib/supabase-blog'
+import { JsonLd } from '@/components/json-ld'
+import { APP_URL, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, absoluteUrl, breadcrumbJsonLd, pageMetadata } from '@/lib/seo'
+import { getPostBySlug, getPublishedPosts, getPublishedSlugs } from '@/lib/supabase-blog'
 import { TiptapRenderer } from '@/components/tiptap-renderer'
 
 export async function generateMetadata({
@@ -13,35 +15,20 @@ export async function generateMetadata({
   const post = await getPostBySlug(slug)
 
   if (!post) {
-    return {
-      title: 'Post Not Found',
-      description: 'The requested blog post could not be found.',
-    }
+    return { title: 'Post Not Found', robots: { index: false, follow: true } }
   }
 
-  const title = post.seo_title || `${post.title} | CareerLead AI Blog`
-  const description = post.seo_description || post.excerpt || `Read ${post.title} on CareerLead AI Blog`
-
-  return {
-    title,
-    description,
-    openGraph: {
-      title: post.title,
-      description,
-      type: 'article',
-      publishedTime: post.published_at ?? undefined,
-      authors: [post.author_name ?? 'CareerLead AI'],
-      url: `https://careerlead.ai/blog/${post.slug}`,
-      ...(post.featured_image_url
-        ? { images: [{ url: post.featured_image_url }] }
-        : {}),
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description,
-    },
-  }
+  return pageMetadata({
+    path: `/blog/${post.slug}/`,
+    title: post.seo_title || `${post.title} | CareerLead AI Blog`,
+    description: post.seo_description || post.excerpt || `Read ${post.title} on the CareerLead AI blog.`,
+    keywords: [...(post.career_tags ?? []), ...(post.skill_tags ?? [])],
+    type: 'article',
+    publishedTime: post.published_at ?? undefined,
+    modifiedTime: post.updated_at ?? undefined,
+    authors: [post.author_name ?? SITE_NAME],
+    ...(post.featured_image_url ? { image: { url: post.featured_image_url, alt: post.title } } : {}),
+  })
 }
 
 export default async function BlogPostPage({
@@ -54,10 +41,45 @@ export default async function BlogPostPage({
 
   if (!post) notFound()
 
+  // Related reading keeps posts linked to each other, not only from /blog/.
+  const otherPosts = (await getPublishedPosts()).filter((p) => p.slug !== post.slug)
+  const relatedPosts = [
+    ...otherPosts.filter((p) => post.category && p.category === post.category),
+    ...otherPosts.filter((p) => !post.category || p.category !== post.category),
+  ].slice(0, 3)
+
   const publishedDate = post.published_at ?? post.created_at
+  const postUrl = absoluteUrl(`/blog/${post.slug}/`)
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.seo_description || post.excerpt || undefined,
+    image: [post.featured_image_url ?? absoluteUrl(DEFAULT_OG_IMAGE.url)],
+    datePublished: publishedDate,
+    dateModified: post.updated_at ?? publishedDate,
+    author: post.author_name
+      ? { '@type': 'Person', name: post.author_name }
+      : { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    publisher: { '@id': `${SITE_URL}/#organization` },
+    mainEntityOfPage: postUrl,
+    articleSection: post.category ?? undefined,
+    keywords: [...(post.career_tags ?? []), ...(post.skill_tags ?? [])].join(', ') || undefined,
+    inLanguage: 'en',
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd
+        data={[
+          articleJsonLd,
+          breadcrumbJsonLd([
+            { name: 'Home', path: '/' },
+            { name: 'Blog', path: '/blog/' },
+            { name: post.title, path: `/blog/${post.slug}/` },
+          ]),
+        ]}
+      />
       {/* Hero Section */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -69,7 +91,7 @@ export default async function BlogPostPage({
               </li>
               <li>/</li>
               <li>
-                <Link href="/blog" className="hover:text-teal-600">Blog</Link>
+                <Link href="/blog/" className="hover:text-teal-600">Blog</Link>
               </li>
               <li>/</li>
               <li className="text-gray-900 line-clamp-1">{post.title}</li>
@@ -147,13 +169,13 @@ export default async function BlogPostPage({
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/generate-career-paths"
+              href={`${APP_URL}/generate-career-paths`}
               className="inline-block bg-white text-teal-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
               Generate Your Career Path
             </Link>
             <Link
-              href="/resume-review"
+              href={`${APP_URL}/resume-review`}
               className="inline-block bg-teal-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-teal-800 transition-colors border border-teal-400"
             >
               Get Resume Review
@@ -166,7 +188,7 @@ export default async function BlogPostPage({
           <p className="text-sm text-gray-500 mb-4">Share this article:</p>
           <div className="flex gap-4">
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://careerlead.ai/blog/${post.slug}`)}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(postUrl)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-teal-600"
@@ -174,7 +196,7 @@ export default async function BlogPostPage({
               Twitter
             </a>
             <a
-              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://careerlead.ai/blog/${post.slug}`)}`}
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-teal-600"
@@ -182,7 +204,7 @@ export default async function BlogPostPage({
               LinkedIn
             </a>
             <a
-              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://careerlead.ai/blog/${post.slug}`)}`}
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-teal-600"
@@ -192,10 +214,31 @@ export default async function BlogPostPage({
           </div>
         </div>
 
+        {relatedPosts.length > 0 && (
+          <section className="mt-12 pt-8 border-t border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Related articles</h2>
+            <ul className="grid gap-4 sm:grid-cols-3">
+              {relatedPosts.map((related) => (
+                <li key={related.slug}>
+                  <Link
+                    href={`/blog/${related.slug}/`}
+                    className="block h-full rounded-xl border border-gray-200 bg-white p-4 hover:border-teal-400 transition-colors"
+                  >
+                    {related.category && (
+                      <span className="text-xs font-medium text-teal-700">{related.category}</span>
+                    )}
+                    <p className="mt-1 font-semibold text-gray-900">{related.title}</p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         {/* Back to Blog */}
         <div className="mt-12">
           <Link
-            href="/blog"
+            href="/blog/"
             className="inline-flex items-center text-teal-600 hover:text-teal-700 font-medium"
           >
             ← Back to all articles

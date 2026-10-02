@@ -1,21 +1,15 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 import { Globe2, TrendingUp, HeartHandshake, Users, Lightbulb, Heart } from "lucide-react"
 import { Section, SectionIntro, InfoCard } from "@/components/marketing/section"
 
-export const metadata: Metadata = {
-  title: "About CareerLead AI - Empowering African Professionals | Ghana - Africa",
+export const metadata: Metadata = pageMetadata({
+  path: "/about/",
+  title: "About CareerLead AI: Career Guidance Built for Africa",
   description:
-    "Discover how CareerLead AI empowers professionals across Ghana and Africa with AI-driven career coaching, expert guidance, and personalized development plans tailored for African markets.",
-  keywords:
-    "professional development Africa, AI career coaching Ghana, career guidance Africa, professional life Africa, career development Ghana, AI career advisor Ghana, African job market",
-  openGraph: {
-    title: "About CareerLead AI - Empowering African Professionals | Ghana - Africa",
-    description:
-      "Discover how CareerLead AI empowers professionals across Ghana and Africa with AI-driven career coaching, expert guidance, and personalized development plans.",
-    url: "https://careerlead.ai/about/",
-    type: "website",
-  },
-}
+    "CareerLead AI helps professionals in Ghana and across Africa plan their next career move with AI career paths, coaching and plans built for African job markets.",
+  keywords: ["about CareerLead AI", "AI career coaching Ghana", "career guidance Africa", "career development Ghana"],
+})
 
 const focusAreas = [
   {

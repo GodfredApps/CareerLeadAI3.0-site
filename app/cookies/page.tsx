@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Cookie Policy | CareerLead AI Ghana",
-  description: "Learn about how CareerLead AI uses cookies to improve your experience on our AI career guidance platform for Ghana and Africa.",
-  keywords: "cookie policy, cookies Ghana, data tracking, website cookies Africa",
-}
+export const metadata: Metadata = pageMetadata({
+  path: "/cookies/",
+  title: "Cookie Policy | CareerLead AI",
+  description:
+    "How CareerLead AI uses cookies and similar technologies, and how you can control them.",
+})
 
 export default function CookiesPage() {
   return (

@@ -1,17 +1,14 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/seo"
 import { Compass } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "Career Coaching FAQ - Common Questions Answered | Ghana - Africa",
-  description: "Get answers to frequently asked questions about AI career coaching, professional development, and career growth opportunities in Ghana and across Africa. Expert guidance available.",
-  keywords: "career guidance Ghana, career coaching questions, professional development FAQ, AI career coaching Ghana, career development Africa, job search Ghana FAQ",
-  openGraph: {
-    title: "Career Coaching FAQ - Common Questions Answered | Ghana - Africa",
-    description: "Get answers to frequently asked questions about AI career coaching, professional development, and career growth opportunities in Ghana and across Africa.",
-    url: "https://careerlead.ai/faq",
-    type: "website",
-  },
-}
+export const metadata: Metadata = pageMetadata({
+  path: "/faq/",
+  title: "CareerLead AI FAQ: AI Career Coaching Questions Answered",
+  description:
+    "Answers to common questions about CareerLead AI: how AI career paths work, pricing, data privacy, CV reviews and coaching for professionals in Ghana and Africa.",
+  keywords: ["CareerLead AI FAQ", "AI career coaching questions", "career guidance Ghana", "job search Ghana"],
+})
 
 export default function FAQPage() {
   // FAQ Schema for enhanced search results
