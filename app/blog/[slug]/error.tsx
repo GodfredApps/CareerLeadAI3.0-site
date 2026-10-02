@@ -26,7 +26,7 @@ export default function Error({
             Try again
           </button>
           <Link
-            href="/blog"
+            href="/blog/"
             className="inline-block bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
           >
             Back to Blog

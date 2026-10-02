@@ -53,7 +53,7 @@ export function CookieBanner() {
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
                   We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.{" "}
-                  <Link href="/privacy" className="text-teal-600 hover:underline dark:text-teal-400 font-medium">
+                  <Link href="/privacy/" className="text-teal-600 hover:underline dark:text-teal-400 font-medium">
                     Read our Privacy Policy
                   </Link>
                 </p>

@@ -149,7 +149,7 @@ export default function Home() {
                   variant="outline"
                   className="h-14 rounded-full border-white/20 bg-white/5 px-8 text-base font-bold text-white backdrop-blur hover:bg-white hover:text-slate-950 transition-all duration-300"
                 >
-                  <Link href="/how-it-works">See how it works</Link>
+                  <Link href="/how-it-works/">See how it works</Link>
                 </Button>
               </div>
 
