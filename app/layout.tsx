@@ -45,10 +45,10 @@ export const metadata: Metadata = {
     siteName: 'CareerLead AI',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image-v2.jpg',
         width: 1200,
         height: 630,
-        alt: 'CareerLead AI - AI-powered career guidance for Ghana and Africa',
+        alt: 'CareerLead AI: get hired faster with an AI career coach built for Africa',
       },
     ],
     locale: 'en_US',
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     site: '@careerlead_ai',
     title: "CareerLead AI - AI-Powered Career Guidance",
     description: "Navigate your career path with AI-powered guidance tailored for Ghana and Africa",
-    images: ['/og-image.jpg'],
+    images: ['/og-image-v2.jpg'],
   },
   robots: {
     index: true,

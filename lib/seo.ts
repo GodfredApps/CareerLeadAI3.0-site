@@ -5,10 +5,10 @@ export const SITE_NAME = 'CareerLead AI'
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://app.careerlead.ai'
 
 export const DEFAULT_OG_IMAGE = {
-  url: '/og-image.jpg',
+  url: '/og-image-v2.jpg',
   width: 1200,
   height: 630,
-  alt: 'CareerLead AI - AI-powered career guidance for Ghana and Africa',
+  alt: 'CareerLead AI: get hired faster with an AI career coach built for Africa',
 } as const
 
 interface StaticRoute {

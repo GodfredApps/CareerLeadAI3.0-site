@@ -23,9 +23,9 @@ import { TrustedBySection } from "@/components/marketing/trusted-by-section"
 
 export const metadata: Metadata = pageMetadata({
   path: "/",
-  title: "CareerLead AI: AI Career Coach & Career Paths for Africa",
+  title: "Free AI Career Coach for Ghana, Nigeria & Kenya | CareerLead AI",
   description:
-    "Free AI career guidance for Africa: personalized career paths, AI CV review, skills assessments and career coaching for professionals in Ghana, Nigeria and Kenya.",
+    "Personalised career paths, CV reviews and local job openings in Ghana, Nigeria and Kenya. Free to start, from your first job to the boardroom.",
   keywords: ["AI career coach", "career guidance", "AI career path", "CV review", "career coaching services", "jobs in Ghana", "remote jobs Africa"],
 })
 
