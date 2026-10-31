@@ -68,20 +68,19 @@ export default function ContactPage() {
                 <Phone className="h-5 w-5 text-primary mr-3 mt-1" />
                 <div>
                   <h3 className="font-medium">Phone</h3>
-                  <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                  <p className="text-muted-foreground">
+                    Contact us via email at{' '}
+                    <a href="mailto:support@careerlead.ai" className="text-primary hover:underline">
+                      support@careerlead.ai
+                    </a>
+                  </p>
                 </div>
               </div>
               <div className="flex items-start">
                 <MapPin className="h-5 w-5 text-primary mr-3 mt-1" />
                 <div>
                   <h3 className="font-medium">Address</h3>
-                  <p className="text-muted-foreground">
-                    123 Career Street
-                    <br />
-                    San Francisco, CA 94105
-                    <br />
-                    United States
-                  </p>
+                  <p className="text-muted-foreground">Accra, Ghana</p>
                 </div>
               </div>
             </div>

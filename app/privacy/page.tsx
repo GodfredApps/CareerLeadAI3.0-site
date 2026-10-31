@@ -114,7 +114,7 @@ export default function PrivacyPolicyPage() {
           <p>
             Email: privacy@careerlead.ai
             <br />
-            Address: 123 Career Street, San Francisco, CA 94105, United States
+            Address: Accra, Ghana
           </p>
         </div>
       </div>
