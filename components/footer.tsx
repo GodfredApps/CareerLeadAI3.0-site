@@ -1,7 +1,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { IMAGES } from "@/lib/supabase-storage"
-import { FOOTER_SECTIONS, SOCIAL_LINKS, resolveSiteHref } from "@/lib/site-nav"
+import { FOOTER_SECTIONS, resolveSiteHref } from "@/lib/site-nav"
+import { SocialButtons } from "@/components/social-buttons"
 
 const CURRENT_SITE = "marketing" as const
 const LINK_CLASS = "text-white/55 hover:text-white"
@@ -43,16 +44,8 @@ export default function Footer() {
             </div>
           ))}
           <div>
-            <h3 className={HEADING_CLASS}>Connect</h3>
-            <ul className="space-y-2 text-sm">
-              {SOCIAL_LINKS.map(link => (
-                <li key={link.name}>
-                  <a href={link.href} target="_blank" rel="noreferrer" className={LINK_CLASS}>
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <h3 className={HEADING_CLASS}>Follow us</h3>
+            <SocialButtons tone="dark" />
           </div>
         </div>
         <div className="mt-12 border-t border-white/10 pt-6">

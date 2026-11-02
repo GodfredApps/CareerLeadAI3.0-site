@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { Compass, Mail, Phone, MapPin } from "lucide-react"
+import { SocialButtons } from '@/components/social-buttons'
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
@@ -83,6 +84,12 @@ export default function ContactPage() {
                   <p className="text-muted-foreground">Accra, Ghana</p>
                 </div>
               </div>
+            </div>
+
+            <div className="mt-8">
+              <h2 className="text-2xl font-bold mb-2">Follow us</h2>
+              <p className="text-muted-foreground mb-4">Job leads, career tips and events, wherever you scroll.</p>
+              <SocialButtons />
             </div>
 
             <div className="mt-8">

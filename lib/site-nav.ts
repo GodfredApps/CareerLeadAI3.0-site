@@ -26,7 +26,10 @@ export interface FooterSection {
   links: readonly SiteLink[]
 }
 
+export type SocialId = 'linkedin' | 'instagram' | 'tiktok' | 'facebook' | 'x'
+
 export interface SocialLink {
+  id: SocialId
   name: string
   href: string
 }
@@ -74,9 +77,11 @@ export const FOOTER_SECTIONS: readonly FooterSection[] = [
 ]
 
 export const SOCIAL_LINKS: readonly SocialLink[] = [
-  { name: 'Twitter', href: 'https://x.com/careerlead_ai' },
-  { name: 'LinkedIn', href: 'https://www.linkedin.com/company/careerlead-ai' },
-  { name: 'Instagram', href: 'https://www.instagram.com/careerlead.ai/' },
+  { id: 'linkedin', name: 'LinkedIn', href: 'https://www.linkedin.com/company/careerlead-ai' },
+  { id: 'instagram', name: 'Instagram', href: 'https://www.instagram.com/careerlead.ai/' },
+  { id: 'tiktok', name: 'TikTok', href: 'https://www.tiktok.com/@careerlead.ai' },
+  { id: 'facebook', name: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61586051671378' },
+  { id: 'x', name: 'X', href: 'https://x.com/careerlead_ai' },
 ]
 
 /** Relative on the owning site, absolute everywhere else. */

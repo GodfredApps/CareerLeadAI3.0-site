@@ -5,6 +5,7 @@ import { JsonLd } from '@/components/json-ld'
 import { APP_URL, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, absoluteUrl, breadcrumbJsonLd, pageMetadata } from '@/lib/seo'
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs } from '@/lib/supabase-blog'
 import { TiptapRenderer } from '@/components/tiptap-renderer'
+import { SocialButtons } from "@/components/social-buttons"
 
 export async function generateMetadata({
   params,
@@ -212,6 +213,14 @@ export default async function BlogPostPage({
               Facebook
             </a>
           </div>
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-teal-100 bg-teal-50/60 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6">
+          <div className="mb-4 sm:mb-0">
+            <p className="font-semibold text-gray-900">Follow CareerLead AI</p>
+            <p className="text-sm text-gray-600">New articles, job leads and career tips, in your feed.</p>
+          </div>
+          <SocialButtons />
         </div>
 
         {relatedPosts.length > 0 && (
