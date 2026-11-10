@@ -42,7 +42,6 @@ export const SITE_URLS: Readonly<Record<Site, string>> = {
 export const PUBLIC_NAV_LINKS: readonly SiteLink[] = [
   { name: 'Home', site: 'marketing', path: '/' },
   { name: 'Job Board', site: 'app', path: '/jobs' },
-  { name: 'Daily Challenge', site: 'app', path: '/challenge' },
   { name: 'How It Works', site: 'marketing', path: '/how-it-works/' },
   { name: 'Become a Coach', site: 'marketing', path: '/become-a-coach/' },
   { name: 'Blog', site: 'marketing', path: '/blog/' },
