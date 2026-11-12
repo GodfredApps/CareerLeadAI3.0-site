@@ -1,908 +1,303 @@
-'use client'
+import Image from 'next/image'
+import { ArrowRight, Check } from 'lucide-react'
+import { CtaBand, PageHero } from '@/components/marketing/page-hero'
+import { APP_URL } from '@/lib/seo'
 
-import React, { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import {
-  ArrowRight,
-  FileText,
-  Sparkles,
-  Download,
-  Copy,
-  Layout,
-  Smartphone,
-  CheckCircle,
-  Navigation,
-  ChevronLeft,
-  ChevronRight,
-  Upload,
-  Loader2,
-  ThumbsUp,
-  AlertCircle,
-  BarChart3,
-  Edit,
-  X,
-} from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { PageHero } from '@/components/marketing/page-hero'
+// What's new: a dated news feed of what has shipped, newest first. The latest
+// release leads with real screenshots; everything else is a short entry.
+// Add new entries to the top of UPDATES and move the date in LAST_UPDATED.
+
+const LAST_UPDATED = '12 November 2026'
+
+type Tag = 'New' | 'Improved'
+
+type Update = {
+  date: string
+  tag: Tag
+  title: string
+  body: string
+  points?: string[]
+  link?: { href: string; label: string }
+}
+
+type Month = { month: string; updates: Update[] }
+
+const UPDATES: Month[] = [
+  {
+    month: 'November 2026',
+    updates: [
+      {
+        date: '12 Nov',
+        tag: 'Improved',
+        title: 'A fresh look for careerlead.ai',
+        body:
+          'Our website has a new home page and cleaner pages throughout, with short animated demos that show how CareerLead works before you sign up.',
+        link: { href: '/how-it-works/', label: 'See how it works' },
+      },
+      {
+        date: '10 Nov',
+        tag: 'New',
+        title: 'Daily Career Challenge',
+        body:
+          'One quick career question a day. Answer it in under a minute, see the explanation, and keep your streak going. You can play without an account; sign in to keep your XP.',
+        link: { href: `${APP_URL}/challenge`, label: "Play today's challenge" },
+      },
+      {
+        date: '7 Nov',
+        tag: 'New',
+        title: 'XP, streaks and badges',
+        body:
+          'The things that move your career forward now earn XP: finishing your profile, asking the AI coach, reviewing your CV, applying for jobs, registering for events and making connections. Your progress card on the home page shows your level and streak.',
+      },
+      {
+        date: '5 Nov',
+        tag: 'Improved',
+        title: 'A sharper AI coach',
+        body:
+          'The coach now answers first and keeps it short, uses your profile to make advice specific to you, and asks at most one follow-up question. Tell it a career you want and use "Plan my path" to get a step-by-step plan.',
+        link: { href: `${APP_URL}/ai-coach`, label: 'Ask the coach' },
+      },
+      {
+        date: '1 Nov',
+        tag: 'Improved',
+        title: 'Event reminders',
+        body:
+          "Registered for an event? We'll email you a reminder a day before and again an hour before it starts, with the joining link.",
+      },
+    ],
+  },
+  {
+    month: 'October 2026',
+    updates: [
+      {
+        date: '25 Oct',
+        tag: 'New',
+        title: 'Networking',
+        body:
+          'Turn on your networking card to be matched with people who share your values, interests, industry and country. Send a request with a short note; once they accept, you can message each other in CareerLead and swap contact details.',
+        link: { href: `${APP_URL}/networking`, label: 'Find people to meet' },
+      },
+      {
+        date: '25 Oct',
+        tag: 'New',
+        title: 'Career events',
+        body:
+          'Browse upcoming career events and register in one tap. You get a confirmation email with a calendar invite, and the joining link is shared only with people who registered.',
+        link: { href: `${APP_URL}/networking`, label: 'See upcoming events' },
+      },
+      {
+        date: '25 Oct',
+        tag: 'Improved',
+        title: 'CV review, rebuilt',
+        body:
+          "Every review now reads your actual CV. You get a score, what's working, what to fix and rewritten lines you can copy, and you can name the role you're aiming for. Download the full report when you're done.",
+        link: { href: `${APP_URL}/resume-review`, label: 'Review your CV' },
+      },
+      {
+        date: '25 Oct',
+        tag: 'Improved',
+        title: 'A clearer profile page',
+        body:
+          'Your profile loads straight into one tidy layout, shows how complete it is, and tells you the next thing worth adding. Each section has its own edit link.',
+        link: { href: `${APP_URL}/profile`, label: 'Open your profile' },
+      },
+      {
+        date: '1 Oct',
+        tag: 'New',
+        title: 'Job board',
+        body:
+          'Find open roles across Africa and remote jobs from our partners, with each job on its own page that you can share with a friend.',
+        link: { href: `${APP_URL}/jobs`, label: 'Browse jobs' },
+      },
+    ],
+  },
+]
+
+const HIGHLIGHTS = [
+  'Your closest career path leads your home page, with a fit score and the reason behind it.',
+  'A career map shows every path as a route from where you are today: shorter route, closer fit.',
+  'Each path lists the skills you already have and the ones still on the way.',
+  'Jobs picked for you come with a reason they match.',
+  'Press ⌘K (Ctrl K on Windows) to jump to anything, and move between pages without reloads.',
+  'Built for your phone too, with a tab bar and a map that fits a small screen.',
+]
+
+const MAP_ALT =
+  "The career map: three paths branch out from 'You today, Junior Data Analyst'. The closest, Healthcare Data Analyst at 85% fit, shows three skills on the way: statistical analysis, data visualization and SQL."
 
 export default function WhatsNewContent() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <PageHero
         eyebrow="What's new"
         title="What's new at CareerLead AI."
-        lead="Discover the powerful new features we've built to supercharge your career journey and help you land your dream job."
+        lead="Everything we've shipped lately, newest first. CareerLead is free, and every update below is already live for you."
       >
-        <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-          <a
-            href={`${process.env.NEXT_PUBLIC_APP_URL}/resume-review`}
-            className="inline-flex h-14 items-center justify-center rounded-full bg-teal-600 px-8 text-base font-bold text-white shadow-xl shadow-teal-950/40 transition-colors hover:bg-teal-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
-          >
-            Try Resume Review <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
-          </a>
-          <a
-            href={`${process.env.NEXT_PUBLIC_APP_URL}/dashboard`}
-            className="inline-flex h-14 items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 text-base font-bold text-white transition-colors hover:bg-white hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
-          >
-            Explore Dashboard
-          </a>
-        </div>
+        <p className="mt-8 text-sm font-semibold text-slate-400">Last updated {LAST_UPDATED}</p>
       </PageHero>
 
-      {/* Hero Feature - Resume Review */}
-      <section className="py-20 md:py-28 bg-background">
+      <LatestRelease />
+
+      <section aria-labelledby="earlier-heading" className="bg-white py-16 md:py-24">
         <div className="container px-4 md:px-6">
-          <motion.div
-            className="flex flex-col md:flex-row items-center gap-12"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.6 }}
+          <h2
+            id="earlier-heading"
+            className="text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl"
           >
-            <div className="flex-1 space-y-6">
-              <motion.div
-                className="inline-flex items-center gap-2 px-3 py-1 bg-accent/10 rounded-full text-sm font-semibold text-accent"
-                initial={{ x: -20, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <Sparkles className="h-4 w-4" />
-                NEW FEATURE
-              </motion.div>
-
-              <motion.h2
-                className="text-3xl md:text-4xl lg:text-5xl font-bold"
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-              >
-                AI-Powered Resume Review
-              </motion.h2>
-
-              <motion.p
-                className="text-lg text-muted-foreground"
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-              >
-                Upload your resume and get instant, comprehensive AI analysis. Our advanced system
-                evaluates your resume across multiple dimensions, provides an overall score,
-                identifies strengths and weaknesses, and gives you actionable suggestions to make
-                your resume stand out to employers.
-              </motion.p>
-
-              <motion.div
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
-              >
-                <FeatureBadge
-                  icon={<CheckCircle className="h-5 w-5" />}
-                  text="Multi-dimensional analysis"
-                />
-                <FeatureBadge
-                  icon={<CheckCircle className="h-5 w-5" />}
-                  text="Instant performance score"
-                />
-                <FeatureBadge
-                  icon={<CheckCircle className="h-5 w-5" />}
-                  text="Actionable suggestions"
-                />
-                <FeatureBadge
-                  icon={<CheckCircle className="h-5 w-5" />}
-                  text="Downloadable reports"
-                />
-              </motion.div>
-
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 }}
-              >
-                <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
-                  <a href={`${process.env.NEXT_PUBLIC_APP_URL}/resume-review`}>
-                    Review Your Resume Now <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-              </motion.div>
-            </div>
-
-            <motion.div
-              className="flex-1"
-              initial={{ x: 50, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-            >
-              <ScreenshotCarousel />
-            </motion.div>
-          </motion.div>
+            Earlier updates
+          </h2>
+          <div className="mt-12 space-y-16">
+            {UPDATES.map(group => (
+              <MonthGroup key={group.month} group={group} />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Additional Features Grid */}
-      <section className="py-16 md:py-24 bg-secondary/50">
-        <div className="container px-4 md:px-6">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              More New Features & Improvements
+      <CtaBand
+        title="See it for yourself."
+        lead="Create a free account and find the career path you're closest to."
+        href={`${APP_URL}/signup`}
+        label="Get started free"
+      />
+    </div>
+  )
+}
+
+function LatestRelease() {
+  return (
+    <section aria-labelledby="latest-heading" className="overflow-hidden bg-slate-50 py-16 md:py-24">
+      <div className="container px-4 md:px-6">
+        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+          <div>
+            <div className="flex flex-wrap items-center gap-3 text-sm font-semibold">
+              <TagPill tag="New" />
+              <time dateTime="2026-11-12" className="text-slate-500">
+                12 November 2026
+              </time>
+            </div>
+            <h2
+              id="latest-heading"
+              className="mt-5 text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl md:text-5xl"
+            >
+              A new home for your career
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              We've added several powerful features to make your career journey smoother and more
-              effective.
+            <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">
+              We rebuilt the CareerLead workspace around one question: how close are you to your
+              next role, and what is the way there?
             </p>
-          </motion.div>
+            <ul className="mt-8 space-y-4">
+              {HIGHLIGHTS.map(point => (
+                <li key={point} className="flex gap-3 text-base leading-7 text-slate-700">
+                  <Check className="mt-1 h-5 w-5 flex-none text-teal-600" aria-hidden="true" />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href={`${APP_URL}/dashboard`}
+              className="mt-10 inline-flex h-12 items-center justify-center rounded-full bg-teal-600 px-7 text-base font-bold text-white transition-colors hover:bg-teal-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+            >
+              Open your workspace <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
+            </a>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FeatureCard
-              icon={<Download className="h-10 w-10 text-primary" />}
-              title="Download Resume Reports"
-              description="Save comprehensive, formatted text reports of your resume analysis. Keep them for reference, share with mentors, or track your progress over time."
-              delay={0.1}
-            />
-            <FeatureCard
-              icon={<Copy className="h-10 w-10 text-primary" />}
-              title="Apply Suggestions Instantly"
-              description="Our new interactive modal lets you copy AI-powered resume improvements with a single click. Individual or bulk copy - your choice!"
-              delay={0.2}
-            />
-            <FeatureCard
-              icon={<Layout className="h-10 w-10 text-primary" />}
-              title="Modern Sidebar Navigation"
-              description="Experience our completely redesigned workspace with a professional, collapsible sidebar. Navigate effortlessly between all your tools."
-              delay={0.3}
-            />
-            <FeatureCard
-              icon={<Smartphone className="h-10 w-10 text-primary" />}
-              title="Enhanced Mobile Experience"
-              description="Enjoy a cleaner, more intuitive mobile interface with our CareerLead AI logo visible at all times. Access all features seamlessly on any device."
-              delay={0.4}
-            />
-            <FeatureCard
-              icon={<CheckCircle className="h-10 w-10 text-primary" />}
-              title="PDF Processing Fixed"
-              description="We've completely rebuilt PDF processing using advanced AI technology. Upload any PDF resume with confidence - it will be analyzed accurately."
-              delay={0.5}
-            />
-            <FeatureCard
-              icon={<Navigation className="h-10 w-10 text-primary" />}
-              title="Smoother Navigation"
-              description="Fixed several navigation quirks including the View History button and mobile menu behavior. Everything now works exactly as you'd expect."
-              delay={0.6}
-            />
+          <div className="relative pb-16 sm:pb-0 sm:pr-16">
+            <figure className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/15">
+              <Image
+                src="/whats-new/workspace-dashboard.jpg"
+                alt="The new CareerLead home page: the closest career path at an 85% fit, first steps with XP, and a list of career paths with fit scores and salary ranges."
+                width={1600}
+                height={852}
+                className="h-auto w-full"
+                priority
+              />
+            </figure>
+            <figure className="absolute -bottom-2 right-0 w-[34%] max-w-[190px] overflow-hidden rounded-[1.6rem] border-[5px] border-slate-950 bg-slate-950 shadow-2xl shadow-slate-900/30 sm:-bottom-10">
+              <Image
+                src="/whats-new/phone-dashboard.jpg"
+                alt="The same home page on a phone."
+                width={700}
+                height={1515}
+                className="h-auto w-full rounded-[1.2rem]"
+              />
+            </figure>
           </div>
         </div>
-      </section>
 
-      {/* How Resume Review Works */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container px-4 md:px-6">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">How Resume Review Works</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Get professional-grade resume analysis in three simple steps
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <StepCard
-              number="1"
-              title="Upload Your Resume"
-              description="Support for PDF, DOCX, and TXT formats. Simply drag and drop or browse to upload your resume."
-              delay={0.1}
+        <figure className="mt-20 md:mt-28">
+          <div className="mx-auto max-w-md overflow-hidden rounded-2xl bg-[#0d2233] shadow-xl shadow-slate-900/10 sm:max-w-none">
+            <Image
+              src="/whats-new/career-map-phone.jpg"
+              alt={MAP_ALT}
+              width={760}
+              height={806}
+              className="h-auto w-full sm:hidden"
             />
-            <StepCard
-              number="2"
-              title="AI Analyzes in Seconds"
-              description="Our advanced AI evaluates your resume across multiple criteria including content, formatting, keywords, and impact."
-              delay={0.2}
-            />
-            <StepCard
-              number="3"
-              title="Get Actionable Insights"
-              description="Receive an overall score, detailed strengths and weaknesses, and specific suggestions you can implement immediately."
-              delay={0.3}
+            <Image
+              src="/whats-new/career-map.jpg"
+              alt={MAP_ALT}
+              width={1400}
+              height={469}
+              className="hidden h-auto w-full sm:block"
             />
           </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground relative overflow-hidden">
-        <motion.div
-          className="absolute top-0 right-0 w-96 h-96 bg-accent/20 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-          }}
-        />
-
-        <div className="container px-4 md:px-6 relative z-10">
-          <motion.div
-            className="flex flex-col items-center text-center space-y-6"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold">Ready to Upgrade Your Resume?</h2>
-            <p className="text-lg max-w-2xl opacity-90">
-              Join thousands of professionals who have improved their resumes and landed their dream
-              jobs with CareerLead AI.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-gray-100">
-                <a href={`${process.env.NEXT_PUBLIC_APP_URL}/resume-review`}>
-                  Try Resume Review Free
-                </a>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white/10"
-              >
-                <a href={`${process.env.NEXT_PUBLIC_APP_URL}/dashboard`}>Explore All Features</a>
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-    </div>
+          <figcaption className="mt-4 text-sm leading-6 text-slate-500">
+            The career map. Each path is drawn as a route from where you are today, with the skills
+            you&apos;ll pick up on the way.
+          </figcaption>
+        </figure>
+      </div>
+    </section>
   )
 }
 
-// Screenshot Carousel Component with Interactive Demos
-const ScreenshotCarousel = () => {
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-
-  useEffect(() => {
-    if (!isAutoPlaying) return
-
-    const interval = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % 4)
-    }, 6000) // 6 seconds per slide for more complex animations
-
-    return () => clearInterval(interval)
-  }, [isAutoPlaying])
-
-  const goToSlide = (index: number) => {
-    setCurrentSlide(index)
-    setIsAutoPlaying(false)
-    setTimeout(() => setIsAutoPlaying(true), 10000)
-  }
-
-  const goToPrevious = () => {
-    setCurrentSlide(prev => (prev - 1 + 4) % 4)
-    setIsAutoPlaying(false)
-    setTimeout(() => setIsAutoPlaying(true), 10000)
-  }
-
-  const goToNext = () => {
-    setCurrentSlide(prev => (prev + 1) % 4)
-    setIsAutoPlaying(false)
-    setTimeout(() => setIsAutoPlaying(true), 10000)
-  }
-
+function MonthGroup({ group }: { group: Month }) {
   return (
-    <div className="relative w-full aspect-[4/3] rounded-lg shadow-2xl overflow-hidden border bg-card">
-      <AnimatePresence mode="wait">
-        {currentSlide === 0 && <Slide1UploadDemo key="slide-1" />}
-        {currentSlide === 1 && <Slide2AnalyzingDemo key="slide-2" />}
-        {currentSlide === 2 && <Slide3ResultsDemo key="slide-3" />}
-        {currentSlide === 3 && <Slide4ExportDemo key="slide-4" />}
-      </AnimatePresence>
-
-      {/* Navigation Arrows */}
-      <button
-        onClick={goToPrevious}
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 dark:bg-gray-900/90 shadow-lg flex items-center justify-center hover:bg-white dark:hover:bg-gray-800 transition-colors z-10"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <button
-        onClick={goToNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 dark:bg-gray-900/90 shadow-lg flex items-center justify-center hover:bg-white dark:hover:bg-gray-800 transition-colors z-10"
-        aria-label="Next slide"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
-
-      {/* Dots Indicator */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {[0, 1, 2, 3].map(index => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === currentSlide ? 'bg-primary w-8' : 'bg-gray-400 dark:bg-gray-600'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
+    <div className="grid gap-6 md:grid-cols-[180px_1fr] md:gap-12">
+      <h3 className="text-sm font-black uppercase tracking-[0.18em] text-teal-700 md:sticky md:top-24 md:self-start">
+        {group.month}
+      </h3>
+      <ol className="divide-y divide-slate-200 border-y border-slate-200">
+        {group.updates.map(update => (
+          <UpdateEntry key={`${update.date}-${update.title}`} update={update} />
         ))}
-      </div>
-
-      {/* Auto-play control */}
-      <div className="absolute top-4 right-4 z-10">
-        <button
-          onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-          className="px-3 py-1 rounded-full bg-white/90 dark:bg-gray-900/90 shadow-lg text-xs font-medium hover:bg-white dark:hover:bg-gray-800 transition-colors"
-          aria-label={isAutoPlaying ? 'Pause autoplay' : 'Resume autoplay'}
-        >
-          {isAutoPlaying ? '⏸' : '▶'}
-        </button>
-      </div>
+      </ol>
     </div>
   )
 }
 
-// Slide 1: Upload Demo
-const Slide1UploadDemo = () => {
-  const [showFile, setShowFile] = useState(false)
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowFile(true), 800)
-    return () => clearTimeout(timer)
-  }, [])
-
+function UpdateEntry({ update }: { update: Update }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -100 }}
-      transition={{ duration: 0.5 }}
-      className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center p-8"
-    >
-      <div className="max-w-md w-full space-y-4">
-        {/* Title & Badge */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-center mb-6"
-        >
-          <Badge className="mb-3 bg-primary">Step 1</Badge>
-          <h3 className="text-xl font-bold">Upload Your Resume</h3>
-          <p className="text-xs text-muted-foreground mt-1">Drag & drop or browse to upload</p>
-        </motion.div>
-
-        {/* Mini Upload Zone */}
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="border-2 border-dashed border-primary/40 rounded-lg p-6 text-center bg-white/50 dark:bg-gray-900/50"
-        >
-          <motion.div
-            animate={{
-              y: showFile ? [0, -10, 0] : 0,
-            }}
-            transition={{ duration: 0.5 }}
-            className="mx-auto bg-primary/10 rounded-full p-3 w-12 h-12 flex items-center justify-center mb-3"
-          >
-            <FileText className="h-6 w-6 text-primary" />
-          </motion.div>
-          <p className="text-xs font-medium mb-2">Drop your file here</p>
-          <Button size="sm" className="text-xs">
-            <Upload className="h-3 w-3 mr-1" />
-            Browse Files
-          </Button>
-        </motion.div>
-
-        {/* File Card Appears */}
-        <AnimatePresence>
-          {showFile && (
-            <motion.div
-              initial={{ y: 20, opacity: 0, scale: 0.9 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              className="p-3 bg-white dark:bg-gray-800 rounded-lg border shadow-sm flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2">
-                <FileText className="h-4 w-4 text-primary" />
-                <div>
-                  <p className="text-xs font-medium">resume.pdf</p>
-                  <p className="text-[10px] text-muted-foreground">1.2 MB</p>
-                </div>
-              </div>
-              <CheckCircle className="h-4 w-4 text-green-500" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Analyze Button */}
-        {showFile && (
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex justify-end"
-          >
-            <Button size="sm" className="animate-pulse">
-              Analyze Resume
-              <ArrowRight className="h-3 w-3 ml-1" />
-            </Button>
-          </motion.div>
-        )}
-      </div>
-    </motion.div>
-  )
-}
-
-// Slide 2: Analyzing Demo
-const Slide2AnalyzingDemo = () => {
-  const [uploadProgress, setUploadProgress] = useState(0)
-  const [analysisProgress, setAnalysisProgress] = useState(0)
-  const [stage, setStage] = useState(0)
-
-  useEffect(() => {
-    // Upload progress
-    const uploadInterval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(uploadInterval)
-          return 100
-        }
-        return prev + 10
-      })
-    }, 100)
-
-    // Analysis progress after upload
-    const analysisTimeout = setTimeout(() => {
-      const analysisInterval = setInterval(() => {
-        setAnalysisProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(analysisInterval)
-            return 100
-          }
-          return prev + 5
-        })
-      }, 150)
-    }, 1200)
-
-    // Stage messages
-    const stageInterval = setInterval(() => {
-      setStage(prev => (prev + 1) % 3)
-    }, 1500)
-
-    return () => {
-      clearInterval(uploadInterval)
-      clearTimeout(analysisTimeout)
-      clearInterval(stageInterval)
-    }
-  }, [])
-
-  const stageMessages = [
-    'Extracting resume sections...',
-    'Evaluating content and structure...',
-    'Generating recommendations...',
-  ]
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -100 }}
-      transition={{ duration: 0.5 }}
-      className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-500/5 to-accent/5 flex items-center justify-center p-8"
-    >
-      <div className="max-w-md w-full space-y-6">
-        {/* Title & Badge */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-center"
-        >
-          <Badge className="mb-3 bg-green-500">Analyzing</Badge>
-          <h3 className="text-xl font-bold">AI Analysis in Progress</h3>
-          <p className="text-xs text-muted-foreground mt-1">Processing your resume</p>
-        </motion.div>
-
-        {/* Spinner */}
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1, rotate: 360 }}
-          transition={{ duration: 0.8, rotate: { repeat: Infinity, duration: 2, ease: 'linear' } }}
-          className="flex justify-center"
-        >
-          <div className="relative w-16 h-16">
-            <Loader2 className="h-16 w-16 text-primary animate-spin" />
-          </div>
-        </motion.div>
-
-        {/* Progress Bars */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="space-y-4 bg-white/50 dark:bg-gray-900/50 p-4 rounded-lg border"
-        >
-          {uploadProgress < 100 ? (
-            <div className="space-y-2">
-              <div className="flex justify-between text-xs">
-                <span>Uploading document</span>
-                <span className="font-medium">{uploadProgress}%</span>
-              </div>
-              <Progress value={uploadProgress} className="h-2" />
-            </div>
-          ) : (
-            <div className="space-y-2">
-              <div className="flex justify-between text-xs">
-                <span>Analyzing content</span>
-                <span className="font-medium">{analysisProgress}%</span>
-              </div>
-              <Progress value={analysisProgress} className="h-2" />
-              <motion.p
-                key={stage}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-xs text-muted-foreground text-center"
-              >
-                {stageMessages[stage]}
-              </motion.p>
-            </div>
-          )}
-        </motion.div>
-      </div>
-    </motion.div>
-  )
-}
-
-// Slide 3: Results Demo
-const Slide3ResultsDemo = () => {
-  const [score, setScore] = useState(0)
-  const targetScore = 87
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setScore(prev => {
-        if (prev >= targetScore) {
-          clearInterval(interval)
-          return targetScore
-        }
-        return prev + 3
-      })
-    }, 50)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -100 }}
-      transition={{ duration: 0.5 }}
-      className="absolute inset-0 w-full h-full bg-gradient-to-br from-primary/5 to-purple-500/5 flex items-center justify-center p-6"
-    >
-      <div className="max-w-2xl w-full space-y-4">
-        {/* Title & Score */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-center mb-4"
-        >
-          <Badge className="mb-2 bg-primary">Complete</Badge>
-          <h3 className="text-lg font-bold">Comprehensive Results</h3>
-          <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.4, type: 'spring' }}
-            className="mt-3"
-          >
-            <div className="text-4xl font-bold text-primary">{score}/100</div>
-            <p className="text-xs text-muted-foreground">Overall Score</p>
-          </motion.div>
-        </motion.div>
-
-        {/* Mini Cards Grid */}
-        <div className="grid grid-cols-3 gap-2">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            <Card className="p-3 border bg-white/50 dark:bg-gray-900/50">
-              <div className="flex items-center gap-2 mb-2">
-                <ThumbsUp className="h-3 w-3 text-green-500" />
-                <p className="text-[10px] font-medium">Strengths</p>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-start gap-1">
-                  <CheckCircle className="h-2 w-2 text-green-500 mt-0.5" />
-                  <p className="text-[9px] text-muted-foreground leading-tight">
-                    Strong action verbs
-                  </p>
-                </div>
-                <div className="flex items-start gap-1">
-                  <CheckCircle className="h-2 w-2 text-green-500 mt-0.5" />
-                  <p className="text-[9px] text-muted-foreground leading-tight">
-                    Quantified results
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.7 }}
-          >
-            <Card className="p-3 border bg-white/50 dark:bg-gray-900/50">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertCircle className="h-3 w-3 text-amber-500" />
-                <p className="text-[10px] font-medium">Improve</p>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-start gap-1">
-                  <AlertCircle className="h-2 w-2 text-amber-500 mt-0.5" />
-                  <p className="text-[9px] text-muted-foreground leading-tight">Add keywords</p>
-                </div>
-                <div className="flex items-start gap-1">
-                  <AlertCircle className="h-2 w-2 text-amber-500 mt-0.5" />
-                  <p className="text-[9px] text-muted-foreground leading-tight">Formatting</p>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.8 }}
-          >
-            <Card className="p-3 border bg-white/50 dark:bg-gray-900/50">
-              <div className="flex items-center gap-2 mb-2">
-                <BarChart3 className="h-3 w-3 text-blue-500" />
-                <p className="text-[10px] font-medium">Scores</p>
-              </div>
-              <div className="space-y-1.5">
-                <div className="space-y-0.5">
-                  <div className="flex justify-between text-[9px]">
-                    <span>Summary</span>
-                    <span className="font-medium">92%</span>
-                  </div>
-                  <Progress value={92} className="h-1" />
-                </div>
-                <div className="space-y-0.5">
-                  <div className="flex justify-between text-[9px]">
-                    <span>Experience</span>
-                    <span className="font-medium">85%</span>
-                  </div>
-                  <Progress value={85} className="h-1" />
-                </div>
-              </div>
-            </Card>
-          </motion.div>
+    <li className="grid gap-3 py-8 sm:grid-cols-[88px_1fr] sm:gap-8">
+      <p className="text-sm font-semibold text-slate-500">{update.date}</p>
+      <article>
+        <div className="flex flex-wrap items-center gap-3">
+          <h4 className="text-xl font-bold tracking-tight text-slate-950">{update.title}</h4>
+          <TagPill tag={update.tag} />
         </div>
-      </div>
-    </motion.div>
+        <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">{update.body}</p>
+        {update.link ? (
+          <a
+            href={update.link.href}
+            className="mt-4 inline-flex items-center text-sm font-bold text-teal-700 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+          >
+            {update.link.label} <ArrowRight className="ml-1 h-4 w-4" aria-hidden="true" />
+          </a>
+        ) : null}
+      </article>
+    </li>
   )
 }
 
-// Slide 4: Export Demo
-const Slide4ExportDemo = () => {
-  const [showModal, setShowModal] = useState(false)
-  const [copied, setCopied] = useState(false)
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowModal(true), 800)
-    return () => clearTimeout(timer)
-  }, [])
-
-  const handleCopy = () => {
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
+function TagPill({ tag }: { tag: Tag }) {
+  const style =
+    tag === 'New'
+      ? 'bg-teal-50 text-teal-800 ring-teal-200'
+      : 'bg-amber-50 text-amber-800 ring-amber-200'
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -100 }}
-      transition={{ duration: 0.5 }}
-      className="absolute inset-0 w-full h-full bg-gradient-to-br from-accent/5 to-primary/5 flex items-center justify-center p-8"
-    >
-      <div className="max-w-md w-full space-y-6">
-        {/* Title & Badge */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-center"
-        >
-          <Badge className="mb-3 bg-accent">Export</Badge>
-          <h3 className="text-xl font-bold">Download & Apply</h3>
-          <p className="text-xs text-muted-foreground mt-1">Get your insights instantly</p>
-        </motion.div>
-
-        {/* Action Buttons */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="space-y-3 bg-white/50 dark:bg-gray-900/50 p-6 rounded-lg border"
-        >
-          <Button className="w-full" size="sm">
-            <Download className="h-3 w-3 mr-2" />
-            Download Report
-          </Button>
-          <Button className="w-full" variant="outline" size="sm" onClick={handleCopy}>
-            {copied ? (
-              <>
-                <CheckCircle className="h-3 w-3 mr-2 text-green-500" />
-                Copied!
-              </>
-            ) : (
-              <>
-                <Edit className="h-3 w-3 mr-2" />
-                Apply Suggestions
-              </>
-            )}
-          </Button>
-        </motion.div>
-
-        {/* Mini Modal Preview */}
-        <AnimatePresence>
-          {showModal && (
-            <motion.div
-              initial={{ y: 50, opacity: 0, scale: 0.9 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: 50, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              className="bg-white dark:bg-gray-800 rounded-lg border shadow-xl p-4"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-bold">Suggestion Preview</p>
-                <button className="hover:bg-gray-100 dark:hover:bg-gray-700 rounded p-1">
-                  <X className="h-3 w-3" />
-                </button>
-              </div>
-              <div className="space-y-2">
-                <div className="p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
-                  <p className="text-[9px] text-green-600 dark:text-green-400 mb-1">Improved:</p>
-                  <p className="text-[10px] leading-tight">
-                    "Led team of 8 engineers, increasing deployment speed by 40%"
-                  </p>
-                </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="w-full text-xs h-7"
-                  onClick={handleCopy}
-                >
-                  <Copy className="h-2.5 w-2.5 mr-1" />
-                  Copy to Clipboard
-                </Button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.div>
+    <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ring-1 ring-inset ${style}`}>
+      {tag}
+    </span>
   )
 }
-
-// Memoized components
-const FeatureBadge = React.memo(({ icon, text }: { icon: React.ReactNode; text: string }) => {
-  return (
-    <div className="flex items-center gap-2 text-sm">
-      <div className="text-primary">{icon}</div>
-      <span className="font-medium">{text}</span>
-    </div>
-  )
-})
-FeatureBadge.displayName = 'FeatureBadge'
-
-const FeatureCard = React.memo(
-  ({
-    icon,
-    title,
-    description,
-    delay = 0,
-  }: {
-    icon: React.ReactNode
-    title: string
-    description: string
-    delay?: number
-  }) => {
-    return (
-      <motion.div
-        className="flex flex-col items-start p-6 bg-card rounded-lg shadow-sm border hover:shadow-md transition-shadow"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-50px' }}
-        transition={{ duration: 0.5, delay }}
-        whileHover={{ y: -4 }}
-      >
-        <div className="mb-4 p-3 bg-primary/10 rounded-lg">{icon}</div>
-        <h3 className="text-xl font-semibold mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
-      </motion.div>
-    )
-  }
-)
-FeatureCard.displayName = 'FeatureCard'
-
-const StepCard = React.memo(
-  ({
-    number,
-    title,
-    description,
-    delay = 0,
-  }: {
-    number: string
-    title: string
-    description: string
-    delay?: number
-  }) => {
-    return (
-      <motion.div
-        className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-sm border"
-        initial={{ opacity: 0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay }}
-      >
-        <motion.div
-          className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mb-4 shadow-lg"
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          transition={{ type: 'spring', stiffness: 300 }}
-        >
-          {number}
-        </motion.div>
-        <h3 className="text-xl font-semibold mb-2">{title}</h3>
-        <p className="text-muted-foreground leading-relaxed">{description}</p>
-      </motion.div>
-    )
-  }
-)
-StepCard.displayName = 'StepCard'
