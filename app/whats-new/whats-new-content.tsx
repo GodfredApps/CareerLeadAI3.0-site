@@ -26,77 +26,31 @@ import {
   X,
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { PageHero } from '@/components/marketing/page-hero'
 
 export default function WhatsNewContent() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-primary/10 via-accent/5 to-background relative overflow-hidden">
-        {/* Animated background blobs */}
-        <motion.div
-          className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <div className="container px-4 md:px-6 relative z-10">
-          <motion.div
-            className="flex flex-col items-center text-center space-y-6 max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+      <PageHero
+        eyebrow="What's new"
+        title="What's new at CareerLead AI."
+        lead="Discover the powerful new features we've built to supercharge your career journey and help you land your dream job."
+      >
+        <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <a
+            href={`${process.env.NEXT_PUBLIC_APP_URL}/resume-review`}
+            className="inline-flex h-14 items-center justify-center rounded-full bg-teal-600 px-8 text-base font-bold text-white shadow-xl shadow-teal-950/40 transition-colors hover:bg-teal-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
           >
-            <motion.div
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-sm font-medium text-primary"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              <Sparkles className="h-4 w-4" />
-              Latest Updates
-            </motion.div>
-
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter">
-              What's New at CareerLead AI
-            </h1>
-
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
-              Discover the powerful new features we've built to supercharge your career journey and
-              help you land your dream job.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
-              <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
-                <a href={`${process.env.NEXT_PUBLIC_APP_URL}/resume-review`}>
-                  Try Resume Review <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-              <Button asChild size="lg" variant="outline">
-                <a href={`${process.env.NEXT_PUBLIC_APP_URL}/dashboard`}>Explore Dashboard</a>
-              </Button>
-            </div>
-          </motion.div>
+            Try Resume Review <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
+          </a>
+          <a
+            href={`${process.env.NEXT_PUBLIC_APP_URL}/dashboard`}
+            className="inline-flex h-14 items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 text-base font-bold text-white transition-colors hover:bg-white hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
+          >
+            Explore Dashboard
+          </a>
         </div>
-      </section>
+      </PageHero>
 
       {/* Hero Feature - Resume Review */}
       <section className="py-20 md:py-28 bg-background">

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { pageMetadata } from "@/lib/seo"
-import { Compass } from "lucide-react"
+import { LegalPage } from "@/components/marketing/legal-page"
 
 export const metadata: Metadata = pageMetadata({
   path: "/privacy/",
@@ -11,17 +11,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="container max-w-4xl py-12 px-4 md:py-16 md:px-6">
-      <div className="space-y-8">
-        <div className="text-center space-y-4">
-          <div className="inline-block rounded-full bg-primary/10 p-3">
-            <Compass className="h-8 w-8 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Privacy Policy</h1>
-          <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">Last updated: June 7, 2025</p>
-        </div>
-
-        <div className="prose prose-gray max-w-none dark:prose-invert">
+    <LegalPage title="Privacy Policy" updated="June 7, 2025">
           <p>
             At CareerLead AI, we take your privacy seriously. This Privacy Policy explains how we collect, use,
             disclose, and safeguard your information when you use our website and services.
@@ -116,8 +106,6 @@ export default function PrivacyPolicyPage() {
             <br />
             Address: Accra, Ghana
           </p>
-        </div>
-      </div>
-    </div>
+    </LegalPage>
   )
 }

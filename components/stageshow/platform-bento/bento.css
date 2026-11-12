@@ -1,0 +1,283 @@
+/* The platform bento. Everything nests under .cl-bento. Colors are the
+   marketing site's own tokens: ink #0B2436, primary #0D9488, ground #F5F8FA. */
+.cl-bento {
+  --pad: 28px;
+  --gap: 14px;
+  --tile: #f2f6f8;
+  --ink: #0b2436;
+  --ink-2: #5a6f7e;
+  container-type: inline-size;
+  -webkit-font-smoothing: antialiased;
+
+  & .cb-grid {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 400px 240px 300px 300px 300px;
+    grid-template-areas: 'hero' 'markets' 'skills' 'insights' 'learning';
+  }
+
+  @container (min-width: 640px) {
+    & .cb-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: 390px 300px 300px;
+      grid-template-areas: 'hero hero' 'markets skills' 'insights learning';
+    }
+  }
+
+  @container (min-width: 960px) {
+    & .cb-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: 390px 300px;
+      grid-template-areas: 'hero hero markets' 'skills insights learning';
+    }
+  }
+
+  & .cb-tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+    background: var(--tile);
+  }
+
+  & .cb-tile--hero { grid-area: hero; }
+  & .cb-tile--markets { grid-area: markets; }
+  & .cb-tile--skills { grid-area: skills; }
+  & .cb-tile--insights { grid-area: insights; }
+  & .cb-tile--learning { grid-area: learning; }
+
+  /* Run-in copy: a bold lead and its gray continuation at one size */
+  & .cb-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 380px;
+    margin: 0;
+    padding: 26px var(--pad) 0;
+    color: var(--ink-2);
+    font-size: 17px;
+    line-height: 24px;
+    letter-spacing: -0.012em;
+    text-wrap: pretty;
+  }
+
+  & .cb-copy b {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  & .cb-tile--hero .cb-copy { max-width: 470px; }
+
+  /* The one dark tile: a statement in large type, copy at the top like
+     every other tile */
+  & .cb-tile--markets {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 26px var(--pad) 28px;
+    background: #0b2436;
+  }
+
+  & .cb-statement {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  & .cb-statement-sub {
+    margin: 14px 0 0;
+    max-width: 280px;
+    color: #9fb4c3;
+    font-size: 17px;
+    line-height: 24px;
+  }
+
+  /* Pictures: pinned to the tile's bottom, cropped by the tile */
+  & .cb-picture {
+    position: absolute;
+    bottom: 0;
+  }
+
+  & .cb-picture--hero {
+    left: 0;
+    width: 100%;
+  }
+
+  /* Small pictures: centered compositions, the tile crops only ground */
+  & .cb-picture--small {
+    left: 50%;
+    width: 320px;
+    margin-left: -160px;
+  }
+
+  & .cb-stage .ss-stage {
+    --ss-font: var(--font-plus-jakarta, 'Plus Jakarta Sans'), system-ui, sans-serif;
+    --ss-accent: #0d9488;
+    --ss-accent-2: #14b8a6;
+    --ss-success: #0d9488;
+    --ss-text-strong: #0b2436;
+    --ss-text: #5a6f7e;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  /* ---- Coach (hero): a chat panel off the bottom, its words whole ---- */
+
+  & .cb-chat {
+    position: absolute;
+    top: 18px;
+    left: var(--pad);
+    right: var(--pad);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    /* Taller than the slot, so the panel runs off the tile's bottom just
+       under its composer */
+    min-height: 300px;
+    padding: 20px;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(11 36 54 / 0.06), 0 12px 32px -14px rgb(11 36 54 / 0.18);
+  }
+
+  & .cb-ask {
+    align-self: flex-end;
+    max-width: 78%;
+    padding: 10px 14px;
+    border-radius: 16px 16px 4px 16px;
+    background: #0f766e;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  & .cb-answer {
+    display: grid;
+    gap: 10px;
+    max-width: 88%;
+  }
+
+  & .cb-answer-lead {
+    color: #0b2436;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  & .cb-answer-rest {
+    display: grid;
+    gap: 9px;
+  }
+
+  & .cb-composer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 44px;
+    margin-top: 4px;
+    padding: 0 8px 0 16px;
+    border: 1px solid #dbe5eb;
+    border-radius: 999px;
+  }
+
+  & .cb-send {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #0d9488;
+  }
+
+  /* ---- Small components ---- */
+
+  & .cb-card {
+    position: absolute;
+    top: 0;
+    left: 16px;
+    right: 16px;
+    padding: 18px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(11 36 54 / 0.06), 0 12px 32px -14px rgb(11 36 54 / 0.18);
+  }
+
+  & .cb-skills {
+    display: grid;
+    gap: 16px;
+    min-height: 200px;
+  }
+
+  & .cb-skill {
+    display: grid;
+    gap: 8px;
+  }
+
+  & .cb-skill-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 18px;
+  }
+
+  & .cb-skill-name {
+    color: #0b2436;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  & .cb-skill-value {
+    color: #0f766e;
+    font-size: 14px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .cb-meter { width: 100%; }
+  & .cb-meter[data-tone='ink'] { --ss-meter-tone: #9fb2bf; }
+
+  & .cb-chart {
+    position: absolute;
+    left: 32px;
+    bottom: 0;
+    --ss-accent: #0d9488;
+  }
+
+  & .cb-courses {
+    display: grid;
+    gap: 6px;
+    min-height: 200px;
+    padding: 10px;
+  }
+
+  & .cb-course {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 44px;
+    padding: 0 12px;
+    border-radius: 10px;
+  }
+
+  & .cb-course[data-done] {
+    background: rgb(13 148 136 / 0.08);
+  }
+
+  & .cb-course-name {
+    color: #0b2436;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  & .cb-ring {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #cfdbe2;
+    border-radius: 50%;
+  }
+}

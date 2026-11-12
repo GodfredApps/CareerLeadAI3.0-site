@@ -3,7 +3,8 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Compass, Mail, Phone, MapPin } from "lucide-react"
+import { Clock, Mail, MapPin, type LucideIcon } from "lucide-react"
+import { PageHero } from "@/components/marketing/page-hero"
 import { SocialButtons } from '@/components/social-buttons'
 
 export default function ContactPage() {
@@ -41,120 +42,84 @@ export default function ContactPage() {
     })
   }
 
+  const field =
+    "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-950 focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/30"
+  const label = "mb-2 block text-sm font-bold text-slate-950"
+
   return (
-    <div className="container max-w-5xl py-12 px-4 md:py-16 md:px-6">
-      <div className="space-y-8">
-        <div className="text-center space-y-4">
-          <div className="inline-block rounded-full bg-primary/10 p-3">
-            <Compass className="h-8 w-8 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Contact Us</h1>
-          <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-            Have questions or feedback? We&apos;d love to hear from you.
-          </p>
-        </div>
+    <>
+      <PageHero
+        eyebrow="Contact"
+        title="Talk to the CareerLead AI team."
+        lead="Questions, feedback or a partnership idea? Send us a message and we'll get back to you."
+      />
 
-        <div className="grid gap-8 md:grid-cols-2">
-          <div>
-            <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
-            <div className="space-y-6">
-              <div className="flex items-start">
-                <Mail className="h-5 w-5 text-primary mr-3 mt-1" />
-                <div>
-                  <h3 className="font-medium">Email</h3>
-                  <p className="text-muted-foreground">support@careerlead.ai</p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <Phone className="h-5 w-5 text-primary mr-3 mt-1" />
-                <div>
-                  <h3 className="font-medium">Phone</h3>
-                  <p className="text-muted-foreground">
-                    Contact us via email at{' '}
-                    <a href="mailto:support@careerlead.ai" className="text-primary hover:underline">
-                      support@careerlead.ai
-                    </a>
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <MapPin className="h-5 w-5 text-primary mr-3 mt-1" />
-                <div>
-                  <h3 className="font-medium">Address</h3>
-                  <p className="text-muted-foreground">Accra, Ghana</p>
-                </div>
+      <section className="bg-white py-16 md:py-24">
+        <div className="container grid gap-12 px-4 md:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <div className="min-w-0">
+            <h2 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">Get in touch</h2>
+            <dl className="mt-8 grid gap-6">
+              <ContactLine icon={Mail} term="Email">
+                <a href="mailto:support@careerlead.ai" className="font-bold text-teal-700 underline-offset-4 hover:underline">
+                  support@careerlead.ai
+                </a>
+              </ContactLine>
+              <ContactLine icon={MapPin} term="Address">
+                Accra, Ghana
+              </ContactLine>
+              <ContactLine icon={Clock} term="Office hours">
+                Monday - Friday: 9:00 AM - 6:00 PM (PST)
+                <br />
+                Saturday - Sunday: Closed
+              </ContactLine>
+            </dl>
+
+            <div className="mt-10 border-t border-slate-200 pt-8">
+              <h2 className="text-lg font-black text-slate-950">Follow us</h2>
+              <p className="mt-2 text-slate-600">Job leads, career tips and events, wherever you scroll.</p>
+              <div className="mt-4">
+                <SocialButtons />
               </div>
             </div>
 
-            <div className="mt-8">
-              <h2 className="text-2xl font-bold mb-2">Follow us</h2>
-              <p className="text-muted-foreground mb-4">Job leads, career tips and events, wherever you scroll.</p>
-              <SocialButtons />
-            </div>
-
-            <div className="mt-8">
-              <h2 className="text-2xl font-bold mb-4">Office Hours</h2>
-              <p className="text-muted-foreground mb-2">Monday - Friday: 9:00 AM - 6:00 PM (PST)</p>
-              <p className="text-muted-foreground">Saturday - Sunday: Closed</p>
-            </div>
+            <p className="mt-10 border-t border-slate-200 pt-8 text-slate-600">
+              Looking for a quick answer? Try the{" "}
+              <a href="/faq/" className="font-bold text-teal-700 underline-offset-4 hover:underline">
+                FAQ
+              </a>
+              .
+            </p>
           </div>
 
-          <div>
+          <div className="min-w-0">
             {isSubmitted ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
-                <h3 className="text-xl font-bold text-green-800 mb-2">Message Sent!</h3>
-                <p className="text-green-700 mb-4">
+              <div className="rounded-3xl border border-teal-200 bg-teal-50 p-8" role="status">
+                <h3 className="text-xl font-black text-slate-950">Message sent</h3>
+                <p className="mt-2 leading-7 text-slate-700">
                   Thank you for reaching out. We&apos;ve received your message and will get back to you shortly.
                 </p>
                 <button
                   onClick={() => setIsSubmitted(false)}
-                  className="inline-flex h-10 items-center justify-center rounded-md bg-green-600 px-4 text-sm font-medium text-white shadow hover:bg-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+                  className="mt-6 inline-flex h-12 items-center justify-center rounded-full bg-slate-950 px-6 text-sm font-bold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2"
                 >
-                  Send Another Message
+                  Send another message
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 bg-muted p-6 rounded-lg">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-1">
-                    Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    required
-                    value={formState.name}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
+              <form onSubmit={handleSubmit} className="grid gap-5 rounded-3xl border border-slate-200 bg-slate-50 p-6 sm:p-8">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label htmlFor="name" className={label}>Name</label>
+                    <input id="name" name="name" type="text" autoComplete="name" required value={formState.name} onChange={handleChange} className={field} />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className={label}>Email</label>
+                    <input id="email" name="email" type="email" autoComplete="email" required value={formState.email} onChange={handleChange} className={field} />
+                  </div>
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-1">
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value={formState.email}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium mb-1">
-                    Subject
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    required
-                    value={formState.subject}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
+                  <label htmlFor="subject" className={label}>Subject</label>
+                  <select id="subject" name="subject" required value={formState.subject} onChange={handleChange} className={field}>
                     <option value="">Select a subject</option>
                     <option value="General Inquiry">General Inquiry</option>
                     <option value="Technical Support">Technical Support</option>
@@ -164,45 +129,34 @@ export default function ContactPage() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-1">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={5}
-                    required
-                    value={formState.message}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  ></textarea>
+                  <label htmlFor="message" className={label}>Message</label>
+                  <textarea id="message" name="message" rows={6} required value={formState.message} onChange={handleChange} className={field} />
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                  className="inline-flex h-14 items-center justify-center rounded-full bg-slate-950 px-8 text-base font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 disabled:opacity-60"
                 >
-                  {isSubmitting ? "Sending..." : "Send Message"}
+                  {isSubmitting ? "Sending..." : "Send message"}
                 </button>
               </form>
             )}
           </div>
         </div>
+      </section>
+    </>
+  )
+}
 
-        <div className="mt-12 pt-8 border-t">
-          <h2 className="text-2xl font-bold mb-6 text-center">Frequently Asked Questions</h2>
-          <p className="text-center text-muted-foreground mb-6">
-            Find quick answers to common questions on our FAQ page.
-          </p>
-          <div className="flex justify-center">
-            <a
-              href="/faq/"
-              className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            >
-              View FAQ
-            </a>
-          </div>
-        </div>
+function ContactLine({ icon: Icon, term, children }: { icon: LucideIcon; term: string; children: React.ReactNode }) {
+  return (
+    <div className="flex items-start gap-4">
+      <span className="flex h-11 w-11 flex-none items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
+        <Icon className="h-5 w-5" aria-hidden="true" />
+      </span>
+      <div className="min-w-0">
+        <dt className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">{term}</dt>
+        <dd className="mt-1 leading-7 text-slate-700">{children}</dd>
       </div>
     </div>
   )

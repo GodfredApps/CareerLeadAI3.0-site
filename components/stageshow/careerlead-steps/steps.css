@@ -1,0 +1,278 @@
+/* How it works: the profile and coach demos. Same dark product look as the
+   hero (careerlead-hero/hero.css supplies the tokens); one window per
+   stage, inset top and left, running off the right and the bottom. */
+
+.cls-win {
+  position: absolute;
+  top: 36px;
+  left: 36px;
+  width: 640px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-win {
+  top: 16px;
+  left: 16px;
+  width: 400px;
+}
+
+.cls-body {
+  min-height: 480px;
+  padding: 22px 24px 0;
+  background: var(--ss-surface);
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-body {
+  min-height: 400px;
+  padding: 14px 16px 0;
+}
+
+/* ---------- Profile ---------- */
+
+.cls-card {
+  width: 440px;
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-card {
+  width: 326px;
+}
+
+.cls-strength {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.cls-label {
+  color: var(--ss-text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cls-value {
+  color: var(--ss-text-strong);
+  font-size: 22px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.cls-rows {
+  display: grid;
+  gap: 0;
+  margin-top: 16px;
+  border-top: 1px solid var(--ss-line);
+}
+
+.cls-row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  min-height: 44px;
+  border-bottom: 1px solid var(--ss-line-faint);
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-row {
+  grid-template-columns: 78px 1fr;
+  min-height: 40px;
+}
+
+.cls-row:last-child {
+  border-bottom: 0;
+}
+
+.cls-row-label {
+  color: var(--ss-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* The bar and the answer share one cell */
+.cls-row-value {
+  display: grid;
+  align-items: center;
+  min-width: 0;
+}
+
+.cls-empty,
+.cls-answer {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+.cls-empty {
+  transition: opacity 0.25s ease;
+}
+
+.cls-empty[data-off] {
+  opacity: 0;
+}
+
+.cls-answer {
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.35s ease 0.08s, transform 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) 0.08s;
+}
+
+.cls-answer[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+.cls-text {
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cls-chips {
+  display: flex;
+  gap: 6px;
+}
+
+.cls-filler {
+  width: 440px;
+  margin-top: 16px;
+}
+
+/* ---------- Coach ---------- */
+
+.cls-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 26px;
+}
+
+.cls-ask {
+  align-self: flex-end;
+  max-width: 360px;
+  margin-right: 60px;
+  padding: 10px 14px;
+  border-radius: 16px 16px 4px 16px;
+  background: #0f766e;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-ask {
+  max-width: 250px;
+  margin-right: 60px;
+  font-size: 13px;
+}
+
+.cls-reply {
+  display: flex;
+  gap: 12px;
+  width: 470px;
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-reply {
+  width: 320px;
+  gap: 10px;
+}
+
+.cls-coach {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ss-accent-soft);
+  box-shadow: inset 0 0 0 1px rgb(34 191 174 / 0.4);
+}
+
+.cls-reply-body {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.cls-thinking {
+  grid-area: 1 / 1;
+  align-self: start;
+  padding-top: 5px;
+  color: var(--ss-text);
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.cls-thinking[data-on] {
+  opacity: 1;
+}
+
+.cls-reply-body > .ss-collapse {
+  grid-column: 1;
+}
+
+.cls-answer-text {
+  margin: 0;
+  padding-top: 4px;
+  color: var(--ss-text-strong);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-answer-text {
+  font-size: 13px;
+}
+
+.cls-action-wrap {
+  padding-top: 12px;
+}
+
+.cls-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 10px 10px 14px;
+  border: 1px solid var(--ss-line);
+  border-radius: var(--ss-radius-md);
+  background: var(--ss-raised);
+}
+
+.cls-action-text {
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cls-composer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 470px;
+  height: 44px;
+  margin-top: auto;
+  margin-bottom: 0;
+  padding: 0 8px 0 16px;
+  border: 1px solid var(--ss-line);
+  border-radius: 12px;
+  background: var(--ss-canvas);
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-composer {
+  width: 326px;
+}
+
+.cls-send {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--ss-accent);
+}
+
+/* The thread fills the visible window, so the composer sits at its foot */
+.cls-body.cls-thread {
+  min-height: 352px;
+}
+
+.cls .ss-stage[data-layout='compact'] .cls-body.cls-thread {
+  min-height: 300px;
+}

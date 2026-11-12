@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { pageMetadata } from "@/lib/seo"
+import { LegalPage } from "@/components/marketing/legal-page"
 
 export const metadata: Metadata = pageMetadata({
   path: "/cookies/",
@@ -10,49 +11,39 @@ export const metadata: Metadata = pageMetadata({
 
 export default function CookiesPage() {
   return (
-    <div className="container max-w-4xl py-12 px-4 md:py-16 md:px-6">
-      <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-4">
-          Cookie Policy
-        </h1>
-        <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-          Last updated: January 2024
-        </p>
-      </div>
-
-      <div className="prose prose-gray max-w-none">
-        <div className="space-y-8">
+    <LegalPage title="Cookie Policy" updated="January 2024">
+        <div>
           <section>
-            <h2 className="text-2xl font-bold mb-4">What Are Cookies?</h2>
-            <p className="text-muted-foreground">
+            <h2>What Are Cookies?</h2>
+            <p>
               Cookies are small text files that are stored on your device when you visit our website. They help us provide you with a better experience by remembering your preferences and understanding how you use our AI career guidance platform.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">How We Use Cookies</h2>
-            <div className="space-y-4">
+            <h2>How We Use Cookies</h2>
+            <div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">Essential Cookies</h3>
-                <p className="text-muted-foreground">
+                <h3>Essential Cookies</h3>
+                <p>
                   These cookies are necessary for the website to function properly. They enable basic features like page navigation, access to secure areas, and account authentication.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">Analytics Cookies</h3>
-                <p className="text-muted-foreground">
+                <h3>Analytics Cookies</h3>
+                <p>
                   We use Google Analytics to understand how visitors use our platform, which pages are most popular, and how we can improve the user experience for African professionals.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">Functional Cookies</h3>
-                <p className="text-muted-foreground">
+                <h3>Functional Cookies</h3>
+                <p>
                   These cookies remember your preferences, such as language settings, career interests, and location preferences within Ghana or Africa.
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">Performance Cookies</h3>
-                <p className="text-muted-foreground">
+                <h3>Performance Cookies</h3>
+                <p>
                   These help us monitor and improve the performance of our AI career coaching platform, ensuring fast loading times and smooth user experience.
                 </p>
               </div>
@@ -60,7 +51,7 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Types of Cookies We Use</h2>
+            <h2>Types of Cookies We Use</h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-border">
                 <thead>
@@ -97,11 +88,11 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Managing Your Cookie Preferences</h2>
-            <p className="text-muted-foreground mb-4">
+            <h2>Managing Your Cookie Preferences</h2>
+            <p>
               You have several options for managing cookies:
             </p>
-            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+            <ul>
               <li>Browser Settings: Most browsers allow you to view, delete, and block cookies</li>
               <li>Opt-out Tools: You can opt out of Google Analytics tracking</li>
               <li>Platform Settings: Adjust your preferences in your CareerLead AI account</li>
@@ -109,29 +100,29 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Browser-Specific Instructions</h2>
-            <div className="space-y-4">
+            <h2>Browser-Specific Instructions</h2>
+            <div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">Google Chrome</h3>
-                <p className="text-muted-foreground">
+                <h3>Google Chrome</h3>
+                <p>
                   Settings → Privacy and security → Cookies and other site data
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">Mozilla Firefox</h3>
-                <p className="text-muted-foreground">
+                <h3>Mozilla Firefox</h3>
+                <p>
                   Settings → Privacy & Security → Cookies and Site Data
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">Safari</h3>
-                <p className="text-muted-foreground">
+                <h3>Safari</h3>
+                <p>
                   Preferences → Privacy → Manage Website Data
                 </p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold mb-2">Microsoft Edge</h3>
-                <p className="text-muted-foreground">
+                <h3>Microsoft Edge</h3>
+                <p>
                   Settings → Cookies and site permissions → Cookies and site data
                 </p>
               </div>
@@ -139,11 +130,11 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Impact of Disabling Cookies</h2>
-            <p className="text-muted-foreground mb-4">
+            <h2>Impact of Disabling Cookies</h2>
+            <p>
               If you disable cookies, some features of our platform may not function properly:
             </p>
-            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+            <ul>
               <li>You may need to log in repeatedly</li>
               <li>Your preferences won't be saved</li>
               <li>Some personalized career recommendations may be less accurate</li>
@@ -152,33 +143,32 @@ export default function CookiesPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Third-Party Cookies</h2>
-            <p className="text-muted-foreground">
+            <h2>Third-Party Cookies</h2>
+            <p>
               We may use third-party services that set their own cookies, including Google Analytics for understanding user behavior and improving our career guidance for African professionals. These third parties have their own privacy policies governing their use of cookies.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Updates to This Policy</h2>
-            <p className="text-muted-foreground">
+            <h2>Updates to This Policy</h2>
+            <p>
               We may update this Cookie Policy from time to time to reflect changes in our practices or applicable laws. We will notify you of any material changes by posting the updated policy on this page.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
-            <p className="text-muted-foreground">
+            <h2>Contact Us</h2>
+            <p>
               If you have any questions about our use of cookies or this Cookie Policy, please contact us at:
             </p>
             <div className="mt-4 p-4 bg-secondary/50 rounded-lg">
-              <p className="text-muted-foreground">
+              <p>
                 Email: privacy@careerlead.ai<br />
                 Subject: Cookie Policy Inquiry
               </p>
             </div>
           </section>
         </div>
-      </div>
-    </div>
+    </LegalPage>
   )
 }

@@ -1,0 +1,165 @@
+/* Slide 2 shares the challenge slide's look and frame (.clh); these are
+   the career-path card's own parts. */
+.clp .ss-stage {
+  --ss-accent-2: #34d3c0;
+}
+
+.clp-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.clp-lines {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* The pill fades in beside the role when this path becomes the top pick;
+   its room is always held, so the role never moves */
+.clp-pick {
+  display: inline-flex;
+  margin-left: 8px;
+  vertical-align: 2px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.clp-pick[data-on] {
+  opacity: 1;
+}
+
+.clp-role {
+  color: var(--ss-text-strong);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.clp-meta {
+  color: var(--ss-text);
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+/* One track and one arc, round caps; the figure centers on its digits */
+.clp-ring {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+}
+
+.clp-ring svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.clp-ring-track,
+.clp-ring-arc {
+  fill: none;
+  stroke-width: 4;
+}
+
+.clp-ring-track {
+  stroke: var(--ss-line);
+}
+
+.clp-ring-arc {
+  stroke: var(--ss-accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.45, 0, 0.1, 1);
+}
+
+.clp-ring-value {
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  font-weight: 800;
+  text-box: trim-both cap alphabetic;
+}
+
+.clp-skills {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.clp-skill {
+  display: grid;
+  gap: 7px;
+}
+
+.clp-skill-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.clp-skill-value {
+  color: var(--ss-accent-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.clp-meter {
+  width: 100%;
+}
+
+.clp-meter .ss-meter__fill,
+.clp-meter > * {
+  transition-duration: 0.8s;
+}
+
+/* Spacing above the row is padding inside the Collapse, so the height it
+   measures includes it (a margin would collapse through and be cut) */
+.clp-next-wrap {
+  padding-top: 18px;
+}
+
+.clp-next {
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgb(34 191 174 / 0.35);
+  border-radius: var(--ss-radius-md);
+  background: var(--ss-accent-soft);
+}
+
+.clp-next-lines {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.clp-next-label {
+  color: var(--ss-accent-text);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.clp-next-text {
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.clp .ss-stage[data-layout='compact'] .clp-skills { gap: 10px; margin-top: 12px; }
+.clp .ss-stage[data-layout='compact'] .clp-next-wrap { padding-top: 12px; }
+.clp .ss-stage[data-layout='compact'] .clp-next { padding: 10px; }

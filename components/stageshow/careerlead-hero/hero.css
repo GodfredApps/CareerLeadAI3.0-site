@@ -1,0 +1,340 @@
+/* CareerLead AI's dark look, from the app's own tokens (app/globals.css
+   .dark): background hsl(205 55% 6%), card hsl(205 48% 10%), primary
+   hsl(174 70% 44%), border hsl(205 35% 19%), muted text hsl(205 18% 64%).
+   The page is the ground: the stage takes the marketing hero's slate-950
+   through --clh-ground, which the host sets to transparent. */
+.clh .ss-stage {
+  /* On the site the hero section is the ground */
+  --clh-ground: transparent;
+  --ss-font: var(--font-plus-jakarta, 'Plus Jakarta Sans'), system-ui, sans-serif;
+  --ss-canvas: #08151e;
+  --ss-chrome: #0a1923;
+  --ss-surface: #0c1b26;
+  --ss-raised: #11283a;
+  --ss-line: #1f3442;
+  --ss-line-faint: #172a37;
+  --ss-text-strong: #e7eef3;
+  --ss-text: #93a5b3;
+  --ss-text-faint: #8a9dab;
+  --ss-icon: #93a5b3;
+  --ss-icon-faint: #637785;
+  --ss-accent: #22bfae;
+  --ss-accent-soft: rgb(34 191 174 / 0.14);
+  --ss-accent-text: #5eead4;
+  --ss-success: #22bfae;
+  --ss-success-soft: rgb(34 191 174 / 0.14);
+  --ss-success-text: #5eead4;
+  --ss-danger: #f87171;
+  --ss-danger-soft: rgb(248 113 113 / 0.12);
+  --ss-danger-text: #fca5a5;
+  --ss-radius-md: 10px;
+  --ss-radius-lg: 14px;
+  overflow: hidden;
+  background: var(--clh-ground);
+}
+
+/* Corner bleed: inset top and left, off the right and the bottom. The left
+   inset leaves the progress card room to straddle the sidebar edge. */
+.clh-win {
+  position: absolute;
+  top: 40px;
+  left: 130px;
+  width: 720px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+.clh .ss-stage[data-layout='compact'] .clh-win {
+  top: 16px;
+  left: 16px;
+  width: 400px;
+}
+
+.clh-side {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 14px 10px;
+}
+
+.clh-nav {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: var(--ss-radius-sm);
+}
+
+.clh-nav[data-active] {
+  background: var(--ss-raised);
+}
+
+.clh-body {
+  min-height: 640px;
+  padding: 22px 24px 0;
+  background: var(--ss-surface);
+}
+
+.clh .ss-stage[data-layout='compact'] .clh-body {
+  min-height: 420px;
+  padding: 14px 16px 0;
+}
+
+.clh-title {
+  margin-bottom: 14px;
+  color: var(--ss-text-strong);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* The challenge card: one step lighter than the page it sits on */
+.clh-card {
+  width: 398px;
+  padding: 18px;
+  border: 1px solid var(--ss-line);
+  border-radius: var(--ss-radius-lg);
+  background: var(--ss-raised);
+}
+
+.clh .ss-stage[data-layout='compact'] .clh-card {
+  width: 310px;
+  padding: 14px;
+}
+
+.clh .ss-stage[data-layout='compact'] .clh-q { font-size: 15px; }
+.clh .ss-stage[data-layout='compact'] .clh-opts { gap: 6px; margin-top: 10px; }
+.clh .ss-stage[data-layout='compact'] .clh-opt { padding: 7px 12px; }
+.clh .ss-stage[data-layout='compact'] .clh-feedback { padding-top: 10px; }
+
+.clh-q {
+  color: var(--ss-text-strong);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.clh-prompt {
+  margin-top: 4px;
+  color: var(--ss-text);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.clh-opts {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.clh-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--ss-line);
+  border-radius: var(--ss-radius-md);
+  background: var(--ss-surface);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.clh-opt[data-hover][data-state='idle'] {
+  border-color: #2a4658;
+}
+
+.clh-opt[data-state='wrong'] {
+  border-color: rgb(248 113 113 / 0.55);
+  background: var(--ss-danger-soft);
+}
+
+.clh-opt[data-state='right'] {
+  border-color: var(--ss-accent);
+  background: var(--ss-accent-soft);
+}
+
+/* The mark: letter, cross or tick crossfade in one 24px disc */
+.clh-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--ss-line-faint);
+  color: var(--ss-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.clh-opt[data-state='wrong'] .clh-mark {
+  background: rgb(248 113 113 / 0.2);
+  color: var(--ss-danger-text);
+}
+
+.clh-opt[data-state='right'] .clh-mark {
+  background: var(--ss-accent);
+  color: #062a26;
+}
+
+.clh-letter {
+  font-size: 11px;
+  font-weight: 700;
+  text-box: trim-both cap alphabetic;
+}
+
+.clh-lines {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+  min-width: 0;
+}
+
+.clh-role {
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.clh-pay {
+  color: var(--ss-text);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.clh-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  transition: color 0.2s ease;
+}
+
+.clh-feedback[data-tone='hint'] {
+  color: var(--ss-danger-text);
+}
+
+.clh-feedback[data-tone='right'] {
+  color: var(--ss-accent-text);
+}
+
+.clh-inline-xp {
+  flex: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
+}
+
+.clh-inline-xp[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Below the card: the dashboard carries on as filler into the crop */
+.clh-filler {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.clh-filler-row {
+  display: flex;
+  gap: 10px;
+}
+
+.clh-filler-card {
+  display: grid;
+  gap: 10px;
+  width: 398px;
+  margin-top: 6px;
+  padding: 18px;
+  border: 1px solid var(--ss-line-faint);
+  border-radius: var(--ss-radius-lg);
+}
+
+/* The progress card: a satellite over the sidebar, half outside the
+   window, present from the first frame; the payoff lands in it */
+.clh-progress {
+  position: absolute;
+  top: 300px;
+  left: 40px;
+  width: 180px;
+  padding: 16px;
+  border: 1px solid #24404f;
+  border-radius: var(--ss-radius-lg);
+  background: #132c3d;
+  box-shadow: 0 18px 40px -16px rgb(0 0 0 / 0.7);
+}
+
+.clh-xp-label {
+  color: var(--ss-text);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.clh-xp {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--ss-text-strong);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.clh-xp-unit {
+  color: var(--ss-text);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.clh-gain {
+  margin-left: auto;
+  color: var(--ss-accent-text);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
+}
+
+.clh-gain[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+.clh-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 20px;
+  margin-top: 12px;
+  color: var(--ss-text-strong);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.clh-stat + .clh-stat {
+  margin-top: 8px;
+}
+
+.clh-flame {
+  flex: none;
+  color: #fb923c;
+}
+
+.clh-award {
+  flex: none;
+  color: var(--ss-accent);
+}
+

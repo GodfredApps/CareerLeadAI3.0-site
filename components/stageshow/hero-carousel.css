@@ -1,0 +1,95 @@
+.hc {
+  position: relative;
+}
+
+/* Tabs sit over the ground above the window, lined up with its left edge
+   (the window is inset 130/720 of the wide stage, 16/358 of the compact) */
+.hc-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 0 0 14px 16px;
+}
+
+@media (min-width: 640px) {
+  .hc-tabs {
+    padding-left: 18%;
+  }
+}
+
+.hc-tab {
+  position: relative;
+  height: 32px;
+  padding: 0 14px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.04);
+  color: rgb(203 213 225 / 0.8);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.hc-tab::before {
+  content: '';
+  position: absolute;
+  inset: -6px -2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hc-tab:hover {
+    color: #fff;
+  }
+}
+
+.hc-tab:focus-visible {
+  outline: 2px solid #2dd4bf;
+  outline-offset: 2px;
+}
+
+.hc-tab[data-active] {
+  border-color: rgb(45 212 191 / 0.45);
+  background: rgb(45 212 191 / 0.1);
+  color: #fff;
+}
+
+/* How long this slide has left: a hairline along the tab's foot */
+.hc-tab-progress {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 1px;
+  background: #2dd4bf;
+  transform-origin: left;
+  animation: hc-progress linear forwards;
+}
+
+.hc-tab-progress[data-paused] {
+  animation-play-state: paused;
+}
+
+@keyframes hc-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Slides share one grid cell, so a leaving slide lies over the arriving
+   one instead of pushing it down. Motion is framer-motion springs and
+   transitions (no keyframes), so a finger can catch a slide mid-move.
+   Vertical panning stays with the page; sideways belongs to the swipe. */
+.hc-slides {
+  display: grid;
+  overflow: hidden;
+}
+
+.hc-slide {
+  grid-area: 1 / 1;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.hc-slide:active {
+  cursor: grabbing;
+}

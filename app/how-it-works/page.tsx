@@ -1,174 +1,115 @@
+import type { ComponentType } from "react"
 import type { Metadata } from "next"
+import { Check } from "lucide-react"
 import { pageMetadata } from "@/lib/seo"
-import { Compass, UserCircle, LineChart, MessageSquare, Lightbulb } from "lucide-react"
+import { PageHero, CtaBand } from "@/components/marketing/page-hero"
+import CareerLeadProfile from "@/components/stageshow/careerlead-steps/profile"
+import CareerLeadPaths from "@/components/stageshow/careerlead-paths"
+import CareerLeadCoach from "@/components/stageshow/careerlead-steps/coach"
+import CareerLeadChallenge from "@/components/stageshow/careerlead-hero"
 
 export const metadata: Metadata = pageMetadata({
   path: "/how-it-works/",
-  title: "How CareerLead AI Works: AI Career Guidance in 3 Steps",
+  title: "How CareerLead AI Works: AI Career Guidance in 4 Steps",
   description:
     "Not sure what career is right for you? Build your profile, get three AI career paths, then close skill gaps with AI CV review and career coaching.",
   keywords: ["how AI career coaching works", "AI career path generator", "career development Ghana", "AI career guidance Africa"],
 })
 
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.careerlead.ai"
+
+type Step = {
+  title: string
+  body: string
+  points: string[]
+  Demo: ComponentType<{ play?: "loop" | "once" }>
+}
+
+const steps: Step[] = [
+  {
+    title: "Build your profile",
+    body: "Upload your CV to fill in your experience, then add what matters to you: your values, interests and the goal you are working towards. The fuller the profile, the sharper everything after it.",
+    points: ["Import experience from your CV", "Name your values and interests", "Set the goal you are aiming for"],
+    Demo: CareerLeadProfile,
+  },
+  {
+    title: "Get three career paths",
+    body: "CareerLead AI turns your profile into three focused paths, each with how well it fits you, the skills you already have, the gaps to close and the next step to take.",
+    points: ["A fit score for each path", "Skills you have, and the gaps", "A concrete next step"],
+    Demo: CareerLeadPaths,
+  },
+  {
+    title: "Ask your AI career coach",
+    body: "Bring the specific question: an offer to negotiate, an interview on Thursday, a CV that isn't getting calls. The coach answers with your profile and your market in mind.",
+    points: ["Answers grounded in your profile", "Salary, CV and interview help", "Practice for the real conversation"],
+    Demo: CareerLeadCoach,
+  },
+  {
+    title: "Sharpen your judgement daily",
+    body: "One short career scenario a day, like spotting a fake job ad. Two tries, a short lesson either way, and XP that keeps your streak going.",
+    points: ["One challenge a day, two tries", "A lesson with every answer", "XP and streaks that track progress"],
+    Demo: CareerLeadChallenge,
+  },
+]
+
 export default function HowItWorksPage() {
   return (
-    <div className="container max-w-5xl py-12 px-4 md:py-16 md:px-6">
-      <div className="space-y-12">
-        <div className="text-center space-y-4">
-          <div className="inline-block rounded-full bg-primary/10 p-3">
-            <Compass className="h-8 w-8 text-primary" />
-          </div>
-          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">How CareerLead AI Works</h1>
-          <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-            Your AI-powered companion for navigating your career journey with confidence.
-          </p>
-        </div>
+    <>
+      <PageHero
+        eyebrow="How it works"
+        title="From your profile to a plan you can act on."
+        lead="Four steps, each building on the last. Start with what you already have, and leave with a direction and the help to follow it."
+      />
 
-        <div className="grid gap-12">
-          {/* Step 1 */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="order-2 md:order-1">
-              <div className="inline-flex items-center justify-center rounded-full bg-primary/10 h-10 w-10 mb-4">
-                <span className="text-primary font-bold">1</span>
-              </div>
-              <h2 className="text-2xl font-bold mb-4">Create Your Profile</h2>
-              <p className="text-muted-foreground mb-4">
-                Start by building your comprehensive career profile. Share your education, work experience, skills,
-                values, and passions. The more information you provide, the more personalized your guidance will be.
-              </p>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <UserCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Complete skill assessments</span>
-                </li>
-                <li className="flex items-start">
-                  <UserCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Define your career values</span>
-                </li>
-                <li className="flex items-start">
-                  <UserCircle className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Identify your passions and interests</span>
-                </li>
-              </ul>
-            </div>
-            <div className="order-1 md:order-2 bg-muted rounded-lg p-6 h-64 flex items-center justify-center">
-              <UserCircle className="h-24 w-24 text-primary/40" />
-            </div>
-          </div>
+      <section className="bg-white py-16 md:py-24 lg:py-28">
+        <ol className="container grid gap-20 px-4 md:px-6 lg:gap-28">
+          {steps.map((step, i) => (
+            <StepRow key={step.title} step={step} index={i} />
+          ))}
+        </ol>
+      </section>
 
-          {/* Step 2 */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="bg-muted rounded-lg p-6 h-64 flex items-center justify-center">
-              <LineChart className="h-24 w-24 text-primary/40" />
-            </div>
-            <div>
-              <div className="inline-flex items-center justify-center rounded-full bg-primary/10 h-10 w-10 mb-4">
-                <span className="text-primary font-bold">2</span>
-              </div>
-              <h2 className="text-2xl font-bold mb-4">Discover Career Paths</h2>
-              <p className="text-muted-foreground mb-4">
-                Our AI analyzes your profile and generates personalized career path recommendations that align with your
-                skills, values, and goals. Explore detailed information about each path, including required skills,
-                growth potential, and day-to-day responsibilities.
-              </p>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <LineChart className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Receive tailored career recommendations</span>
-                </li>
-                <li className="flex items-start">
-                  <LineChart className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Compare different career options</span>
-                </li>
-                <li className="flex items-start">
-                  <LineChart className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Understand skill gaps and opportunities</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+      <CtaBand
+        title="Ready to find your direction?"
+        lead="Start free. Your profile takes a few minutes, and your first career paths follow straight after."
+        href={`${appUrl}/signup`}
+        label="Start free"
+      />
+    </>
+  )
+}
 
-          {/* Step 3 */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="order-2 md:order-1">
-              <div className="inline-flex items-center justify-center rounded-full bg-primary/10 h-10 w-10 mb-4">
-                <span className="text-primary font-bold">3</span>
-              </div>
-              <h2 className="text-2xl font-bold mb-4">Get AI Coaching</h2>
-              <p className="text-muted-foreground mb-4">
-                Chat with our AI career coach to get personalized advice on specific career challenges, interview
-                preparation, resume building, networking strategies, and more. Available 24/7, our coach provides
-                actionable guidance whenever you need it.
-              </p>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <MessageSquare className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Ask specific career questions</span>
-                </li>
-                <li className="flex items-start">
-                  <MessageSquare className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Receive personalized advice</span>
-                </li>
-                <li className="flex items-start">
-                  <MessageSquare className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Practice interview responses</span>
-                </li>
-              </ul>
-            </div>
-            <div className="order-1 md:order-2 bg-muted rounded-lg p-6 h-64 flex items-center justify-center">
-              <MessageSquare className="h-24 w-24 text-primary/40" />
-            </div>
-          </div>
-
-          {/* Step 4 */}
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="bg-muted rounded-lg p-6 h-64 flex items-center justify-center">
-              <Lightbulb className="h-24 w-24 text-primary/40" />
-            </div>
-            <div>
-              <div className="inline-flex items-center justify-center rounded-full bg-primary/10 h-10 w-10 mb-4">
-                <span className="text-primary font-bold">4</span>
-              </div>
-              <h2 className="text-2xl font-bold mb-4">Track Your Progress</h2>
-              <p className="text-muted-foreground mb-4">
-                Set career goals and track your progress over time. Our dashboard provides insights into your skill
-                development, achievements, and areas for improvement. Celebrate milestones and stay motivated on your
-                career journey.
-              </p>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <Lightbulb className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Set and monitor career goals</span>
-                </li>
-                <li className="flex items-start">
-                  <Lightbulb className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Visualize your career growth</span>
-                </li>
-                <li className="flex items-start">
-                  <Lightbulb className="h-5 w-5 text-primary mr-2 mt-0.5" />
-                  <span className="text-muted-foreground">Receive progress-based recommendations</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-muted rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Ready to Take Control of Your Career?</h2>
-          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Join thousands of professionals who are using CareerLead AI to navigate their career journeys with
-            confidence. Get started today and discover the career path that&apos;s right for you.
-          </p>
-          <div className="flex justify-center">
-            <a
-              href={`${process.env.NEXT_PUBLIC_APP_URL}/signup`}
-              className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-            >
-              Get Started
-            </a>
-          </div>
-        </div>
+function StepRow({ step, index }: { step: Step; index: number }) {
+  const { title, body, points, Demo } = step
+  // Pictures alternate sides on wide screens; on phones the copy leads
+  const flip = index % 2 === 1
+  return (
+    <li
+      className={`grid items-center gap-10 lg:gap-16 ${flip ? "lg:grid-cols-[1.15fr_0.85fr]" : "lg:grid-cols-[0.85fr_1.15fr]"}`}
+    >
+      <div className={flip ? "min-w-0 lg:order-2" : "min-w-0"}>
+        <p className="text-xs font-black uppercase tracking-[0.22em] text-teal-700">Step {index + 1}</p>
+        <h2 className="mt-4 text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl">{title}</h2>
+        <p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">{body}</p>
+        <ul className="mt-7 grid gap-3">
+          {points.map(point => (
+            <li key={point} className="flex items-start gap-3 text-slate-700">
+              <span className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-teal-50 text-teal-700">
+                <Check className="h-4 w-4" aria-hidden="true" />
+              </span>
+              {point}
+            </li>
+          ))}
+        </ul>
       </div>
-    </div>
+      {/* The product's dark ground; the window runs off its right and foot */}
+      <div
+        className={`min-w-0 overflow-hidden rounded-3xl bg-slate-950 ${flip ? "lg:order-1" : ""}`}
+        aria-hidden="true"
+        data-ss-fill
+      >
+        <Demo play="once" />
+      </div>
+    </li>
   )
 }

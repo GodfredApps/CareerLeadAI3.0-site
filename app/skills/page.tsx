@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { pageMetadata } from "@/lib/seo"
 import { sanityClient, skillsQuery } from '@/lib/sanity'
+import { PageHero } from "@/components/marketing/page-hero"
 
 interface Skill {
   _id: string
@@ -23,67 +24,37 @@ export default async function SkillsPage() {
   const skills: Skill[] = await sanityClient.fetch(skillsQuery)
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Skills Directory
-          </h1>
-          <p className="text-xl text-gray-600">
-            Browse our collection of in-demand skills
-          </p>
+    <>
+      <PageHero eyebrow="Skills directory" title="In-demand skills." lead="Skills employers in Ghana and across Africa are hiring for." />
+      <section className="bg-white py-16 md:py-24">
+        <div className="container px-4 md:px-6">
+          {skills.length === 0 ? (
+            <p className="text-lg text-slate-600">No skills listed yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {skills.map(skill => (
+                <article key={skill._id} className="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <h2 className="text-xl font-bold text-slate-950">{skill.name}</h2>
+                    <span className={`flex-none rounded-full px-3 py-1 text-xs font-bold ${DEMAND_TONE[skill.demandLevel] ?? DEMAND_TONE.default}`}>
+                      {skill.demandLevel.replace("_", " ")}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm font-semibold capitalize text-teal-700">{skill.category.replace("_", " ")}</p>
+                  {skill.description && <p className="mt-3 line-clamp-3 leading-7 text-slate-600">{skill.description}</p>}
+                </article>
+              ))}
+            </div>
+          )}
         </div>
-
-        {skills.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No skills found. Create some in the Studio!</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {skills.map((skill) => (
-              <div
-                key={skill._id}
-                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {skill.name}
-                  </h2>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      skill.demandLevel === 'very_high'
-                        ? 'bg-red-100 text-red-800'
-                        : skill.demandLevel === 'high'
-                        ? 'bg-orange-100 text-orange-800'
-                        : skill.demandLevel === 'medium'
-                        ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}
-                  >
-                    {skill.demandLevel.replace('_', ' ').toUpperCase()}
-                  </span>
-                </div>
-
-                <p className="text-sm text-gray-500 mb-3 capitalize">
-                  {skill.category.replace('_', ' ')}
-                </p>
-
-                {skill.description && (
-                  <p className="text-gray-700 text-sm line-clamp-3">
-                    {skill.description}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-12 text-center">
-          <p className="text-sm text-gray-500">
-            Total Skills: <span className="font-semibold">{skills.length}</span>
-          </p>
-        </div>
-      </div>
-    </div>
+      </section>
+    </>
   )
+}
+
+const DEMAND_TONE: Record<string, string> = {
+  very_high: "bg-slate-950 text-teal-300",
+  high: "bg-teal-100 text-teal-800",
+  medium: "bg-slate-200 text-slate-700",
+  default: "bg-slate-100 text-slate-600",
 }
