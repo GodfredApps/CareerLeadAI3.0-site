@@ -1,24 +1,23 @@
 import type { Metadata } from "next"
 import { pageMetadata } from "@/lib/seo"
 import React from "react"
-import Image from "next/image"
 import Link from "next/link"
 import {
   ArrowRight,
-  BarChart3,
-  BookOpen,
   Briefcase,
   CheckCircle2,
   Clock,
   Compass,
   FileText,
-  MessageCircle,
   Sparkles,
   Target,
   Users,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { HeroDashboardPreview } from "@/components/marketing/hero-dashboard-preview"
+import { HeroCarousel } from "@/components/stageshow/hero-carousel"
+import { PlatformBento } from "@/components/stageshow/platform-bento"
+import { LatestGuides } from "@/components/marketing/latest-guides"
+import { HomeFaq } from "@/components/marketing/home-faq"
 import { TrustedBySection } from "@/components/marketing/trusted-by-section"
 
 export const metadata: Metadata = pageMetadata({
@@ -76,28 +75,6 @@ const workflow = [
   },
 ]
 
-const features = [
-  {
-    title: "AI Career Coach",
-    body: "Ask specific questions about interviews, career choices, salary conversations, and job search blocks.",
-    icon: MessageCircle,
-  },
-  {
-    title: "Skills Assessment",
-    body: "Understand strengths and gaps so your next learning move is based on evidence, not guesswork.",
-    icon: Target,
-  },
-  {
-    title: "Career Insights",
-    body: "See practical market signals and translate them into better decisions for your next role.",
-    icon: BarChart3,
-  },
-  {
-    title: "Learning Direction",
-    body: "Move from broad course lists to focused learning priorities tied to your chosen path.",
-    icon: BookOpen,
-  },
-]
 
 const proof = [
   "Career paths are based on your profile, not generic job titles.",
@@ -113,10 +90,9 @@ export default function Home() {
         <div className="absolute inset-0 opacity-[0.05] bg-[url('/grid.svg')]" />
 
         <div className="container relative z-10 flex items-center px-4 py-16 md:px-6 lg:min-h-[calc(100vh-4.5rem)] lg:py-20">
-          <div className="grid w-full min-w-0 items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="min-w-0 max-w-3xl">
+          <div className="grid w-full min-w-0 items-center gap-12">
+            <div className="min-w-0 max-w-3xl xl:max-w-[600px]">
               <div className="inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-4 py-1.5 text-xs font-bold text-teal-300 backdrop-blur mb-6">
-                <Sparkles className="h-3.5 w-3.5 text-teal-400" />
                 <span>Next-Gen Career Intelligence Platform</span>
               </div>
 
@@ -165,8 +141,14 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="hidden lg:block">
-              <HeroDashboardPreview />
+            {/* The product runs off real edges: the screen's right edge and
+                the hero's bottom. Stacked under the copy below xl; beside it
+                from xl, pinned to the section's bottom-right corner. */}
+            <div
+              data-ss-fill
+              className="-mx-4 -mb-16 w-[calc(100%+2rem)] max-w-[820px] md:-mx-6 md:w-[calc(100%+3rem)] lg:-mb-20 xl:absolute xl:bottom-0 xl:right-[calc((100%-100vw)/2)] xl:mx-0 xl:mb-0 xl:w-[min(50vw,860px)]"
+            >
+              <HeroCarousel />
             </div>
           </div>
         </div>
@@ -258,7 +240,7 @@ export default function Home() {
                     <Icon className="h-6 w-6 text-teal-300" />
                   </div>
                   <div>
-                    <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-400">
+                    <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
                       Step {index + 1}
                     </p>
                     <h3 className="mt-2 text-xl font-black text-slate-950">{title}</h3>
@@ -282,19 +264,15 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-slate-200 bg-slate-200 md:grid-cols-2 lg:grid-cols-4">
-            {features.map(({ title, body, icon: Icon }) => (
-              <article key={title} className="bg-white p-7 transition-all duration-300 hover:bg-slate-50/80 hover:scale-[1.01]">
-                <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-700">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-black text-slate-950">{title}</h3>
-                <p className="mt-3 leading-7 text-slate-600">{body}</p>
-              </article>
-            ))}
+          <div className="mt-12">
+            <PlatformBento />
           </div>
         </div>
       </section>
+
+      <LatestGuides />
+
+      <HomeFaq />
 
       <section className="bg-slate-950 py-20 text-white md:py-28">
         <div className="container px-4 md:px-6">
@@ -330,7 +308,7 @@ export default function Home() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </a>
               </Button>
-              <p className="mt-4 flex items-center justify-center gap-2 text-xs text-white/45">
+              <p className="mt-4 flex items-center justify-center gap-2 text-xs text-white/60">
                 <Clock className="h-4 w-4" />
                 First recommendation in minutes
               </p>
